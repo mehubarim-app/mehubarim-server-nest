@@ -31,9 +31,11 @@ export async function loadEnvParamsFromSsm() {
   if (process.env.NODE_ENV === 'local') {
     return;
   }
+  console.info('loading env params from SSM');
   const ssm = new SSM();
   await keys.forEach(async (key) => {
     const value = await getParameter(ssm, `/${appName}/${process.env}/${key}`);
+    console.info(`/${appName}/${process.env}/${key}`,value);
     process.env[key.replace('-', '_').toUpperCase()] = value;
   });
 }
