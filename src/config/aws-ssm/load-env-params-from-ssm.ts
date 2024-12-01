@@ -5,7 +5,6 @@ const keys = [
   'jwt-expiration',
   'jwt-secret',
   'mmongodb-uri',
-  'node-env',
   'port',
 ];
 
