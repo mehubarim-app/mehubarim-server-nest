@@ -1,7 +1,7 @@
 import { SSM } from 'aws-sdk';
 
 const appName = 'mehubarim-server';
-const keys = ['jwt-expiration', 'jwt-secret', 'mmongodb-uri', 'port'];
+const keys = ['jwt-expiration', 'jwt-secret', 'mongodb-uri', 'port'];
 
 async function fetchParameter(
   ssm: SSM,
@@ -24,19 +24,20 @@ async function fetchParameter(
 }
 
 export async function loadEnvParamsFromSsm(): Promise<void> {
-  if (process.env.NODE_ENV === 'local') {
+  const env = process.env.NODE_ENV;
+  if (env === 'local') {
     console.info('Skipping SSM loading, local environment detected');
     return;
   }
 
   console.info(
-    `Loading environment variables from SSM for environment: ${process.env.NODE_ENV}`,
+    `Loading environment variables from SSM for environment: ${env}`,
   );
-  const ssm = new SSM();
+  const ssm = new SSM({ region: 'us-east-1' });
 
   try {
     const loadPromises = keys.map(async (key) => {
-      const parameterName = `/${appName}/${process.env.NODE_ENV}/${key}`;
+      const parameterName = `/${appName}/${env}/${key}`;
       const value = await fetchParameter(ssm, parameterName);
 
       if (value) {
