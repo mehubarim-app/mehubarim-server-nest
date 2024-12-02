@@ -1,4 +1,4 @@
-name: CI
+name: Build & Deploy to AWS EC2
 
 on:
   push:
@@ -23,6 +23,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Run tests
+      - name: Run tests
+        run: npm test  # Replace with the correct command to run your tests (e.g., "npm run test" or "npm run test:ci")
+
       # Build the project
       - name: Build the project
         run: npm run build
@@ -37,7 +41,25 @@ jobs:
           elif [[ $GITHUB_REF == "refs/heads/dev" ]]; then
             echo "APP_NAME=mehubarim-server-dev" >> $GITHUB_ENV
             echo "APP_ENV=dev" >> $GITHUB_ENV
-            fi
+          fi
+
+      # Save the build output as an artifact
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-output
+          path: ./dist # Replace with your actual build output directory
+
+  deploy:
+    needs: build  # This makes the deploy job depend on the build job
+    runs-on: ubuntu-latest
+
+    steps:
+      # Download the build artifact from the build job
+      - name: Download build artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: build-output
 
       # Stop the app using PM2 on the remote server
       - name: Stop app using PM2
@@ -56,7 +78,7 @@ jobs:
         uses: burnett01/rsync-deployments@5.1
         with:
           switches: -avzr --delete
-          path: ./*
+          path: ./dist/*  # Adjust according to your artifact's content
           remote_path: "${{ secrets.DEPLOY_DIR }}${{ env.APP_NAME }}/"
           remote_host: "${{ secrets.EC2_PUBLIC_IP }}"
           remote_user: "${{ secrets.EC2_USER }}"
@@ -73,7 +95,7 @@ jobs:
             pm2 start npm --name "${{ env.APP_NAME }}" --cwd ${{ secrets.DEPLOY_DIR }}${{ env.APP_NAME }} -- run start:${{ env.APP_ENV }}
             pm2 save
 
-      # Health check here if required
+      # Health check
       - name: Health check
         run: |
-           curl -X 'GET' 'http://ec2-98-83-207-140.compute-1.amazonaws.com:3000/health' -H 'accept: application/json' || exit 1
+          curl -X 'GET' 'http://ec2-98-83-207-140.compute-1.amazonaws.com:3000/health' -H 'accept: application/json' || exit 1
