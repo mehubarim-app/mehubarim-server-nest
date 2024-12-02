@@ -1,4 +1,4 @@
-name: Build & Deploy to AWS EC2
+name: CI
 
 on:
   push:
@@ -25,11 +25,16 @@ jobs:
 
       # Run tests
       - name: Run tests
-        run: npm test  # Replace with the correct command to run your tests (e.g., "npm run test" or "npm run test:ci")
+        run: npm test  # Replace with the correct command to run your tests
 
       # Build the project
       - name: Build the project
         run: npm run build
+
+      # Check if build output exists
+      - name: Check build output
+        run: |
+          ls -alh ./dist  # Replace with the correct directory name
 
       # Set the app name based on the branch
       - name: Set app name based on branch
@@ -48,7 +53,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: build-output
-          path: ./dist # Replace with your actual build output directory
+          path: ./dist  # Adjust if the output is in a different directory
 
   deploy:
     needs: build  # This makes the deploy job depend on the build job
@@ -78,7 +83,7 @@ jobs:
         uses: burnett01/rsync-deployments@5.1
         with:
           switches: -avzr --delete
-          path: ./dist/*  # Adjust according to your artifact's content
+          path: ./dist/*  # Update this path if your build directory is different
           remote_path: "${{ secrets.DEPLOY_DIR }}${{ env.APP_NAME }}/"
           remote_host: "${{ secrets.EC2_PUBLIC_IP }}"
           remote_user: "${{ secrets.EC2_USER }}"
