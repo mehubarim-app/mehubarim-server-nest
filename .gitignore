@@ -97,3 +97,6 @@ dist/
 
 # Nest.js specific
 /documentation
+
+# .npmrc file
+.npmrc

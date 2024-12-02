@@ -15,14 +15,16 @@ import { UsersModule } from './modules/users/users.module';
       isGlobal: true,
       envFilePath: '.env',
     }),
-    
+
     // MongoDB connection setup
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async () => {
         const uri = process.env.MONGODB_URI;
         if (!uri) {
-          throw new Error('MONGODB_URI is not defined in environment variables');
+          throw new Error(
+            'MONGODB_URI is not defined in environment variables',
+          );
         }
         return {
           uri,
