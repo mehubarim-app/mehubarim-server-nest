@@ -20,7 +20,7 @@ async function bootstrap() {
   // Setup Swagger documentation
   const config = new DocumentBuilder()
     .setTitle('Mehubarim API')
-    .setDescription('The Mehubarim API description.')
+    .setDescription('The Mehubarim API description')
     .setVersion('1.0')
     .addBearerAuth()
     .build();
