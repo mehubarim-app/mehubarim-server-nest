@@ -90,7 +90,7 @@ jobs:
         uses: burnett01/rsync-deployments@5.1
         with:
           switches: -avzr --delete
-          path: ./build-output/*   # Update this path if your build directory is different
+          path: ./*
           remote_path: "${{ secrets.DEPLOY_DIR }}${{ env.APP_NAME }}/"
           remote_host: "${{ secrets.EC2_PUBLIC_IP }}"
           remote_user: "${{ secrets.EC2_USER }}"
