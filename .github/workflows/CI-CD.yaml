@@ -1,4 +1,4 @@
-name: CI
+name: Build $ Deploy to AWS EC2
 
 on:
   push:
@@ -31,10 +31,11 @@ jobs:
       - name: Build the project
         run: npm run build
 
-      # Check if build output exists
+      # Check the contents of the workspace to ensure build output exists
       - name: Check build output
         run: |
-          ls -alh ./dist  # Replace with the correct directory name
+          echo "Listing contents of workspace:"
+          ls -alh ./dist  # Adjust if the output directory is different
 
       # Set the app name based on the branch
       - name: Set app name based on branch
@@ -65,6 +66,12 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-output
+
+      # Print directory structure before deployment
+      - name: Print directory structure
+        run: |
+          echo "Directory structure:"
+          tree -L 2  # Display directory structure at two levels
 
       # Stop the app using PM2 on the remote server
       - name: Stop app using PM2
