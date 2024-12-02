@@ -50,7 +50,7 @@ jobs:
 
       # Save the build output as an artifact
       - name: Upload build artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build-output
           path: ./dist  # Adjust if the output is in a different directory
