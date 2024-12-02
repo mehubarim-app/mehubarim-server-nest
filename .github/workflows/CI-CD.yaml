@@ -76,4 +76,4 @@ jobs:
       # Health check here if required
       - name: Health check
         run: |
-           curl -X 'GET' 'http://localhost:3000/health' -H 'accept: application/json' || exit 1
+           curl -X 'GET' 'http://ec2-98-83-207-140.compute-1.amazonaws.com:3000/health' -H 'accept: application/json' || exit 1
