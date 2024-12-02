@@ -38,18 +38,6 @@ jobs:
           echo "Listing contents of workspace:"
           ls -alh ./dist  # Adjust if the output directory is different
 
-      # Set the app name based on the branch
-      - name: Set app name based on branch
-        id: set_app_name
-        run: |
-          if [[ $GITHUB_REF == "refs/heads/main" ]]; then
-            echo "APP_NAME=mehubarim-server" >> $GITHUB_ENV
-            echo "APP_ENV=prod" >> $GITHUB_ENV
-          elif [[ $GITHUB_REF == "refs/heads/dev" ]]; then
-            echo "APP_NAME=mehubarim-server-dev" >> $GITHUB_ENV
-            echo "APP_ENV=dev" >> $GITHUB_ENV
-          fi
-
       # Save the build output as an artifact
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
@@ -62,6 +50,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Set the app name and app env based on the branch
+      - name: Set app name and app env based on branch
+        id: set_app_name_env
+        run: |
+          if [[ $GITHUB_REF == "refs/heads/main" ]]; then
+            echo "APP_NAME=mehubarim-server" >> $GITHUB_ENV
+            echo "APP_ENV=prod" >> $GITHUB_ENV
+          elif [[ $GITHUB_REF == "refs/heads/dev" ]]; then
+            echo "APP_NAME=mehubarim-server-dev" >> $GITHUB_ENV
+            echo "APP_ENV=dev" >> $GITHUB_ENV
+          fi
+
       # Download the build artifact from the build job
       - name: Download build artifact
         uses: actions/download-artifact@v4
