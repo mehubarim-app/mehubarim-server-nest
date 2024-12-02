@@ -25,7 +25,7 @@ async function fetchParameter(
 
 export async function loadEnvParamsFromSsm(): Promise<void> {
   const env = process.env.NODE_ENV?.toLowerCase() || 'development';
-  
+
   if (env === 'local') {
     console.info('Local environment detected, skipping SSM loading');
     return;
