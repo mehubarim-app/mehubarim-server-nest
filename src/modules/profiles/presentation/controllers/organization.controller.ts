@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { OrganizationService } from '@modules/profiles/application/services/organization.service';
-import { CreateOrganizationDto } from '@modules/profiles/domain/dto/create-organization.dto';
+import { OrganizationProfileDataDto } from '@modules/profiles/domain/dto/organization-profile.dto';
 import { Organization } from '@modules/profiles/domain/entities/organization.entity';
 import { JwtAuthGuard } from '@modules/auth/guards/jwt-auth.guard';
 
@@ -27,8 +27,8 @@ export class OrganizationController {
     description: 'The organization profile has been successfully created.',
     type: Organization,
   })
-  async createOrganization(@Body() createOrganizationDto: CreateOrganizationDto): Promise<Organization> {
-    return this.organizationService.createOrganization(createOrganizationDto);
+  async createOrganization(@Body() createOrganizationDto: OrganizationProfileDataDto): Promise<Organization> {
+    return this.organizationService.createProfile(createOrganizationDto);
   }
 
   @Get(':id')
@@ -39,7 +39,7 @@ export class OrganizationController {
     type: Organization,
   })
   async getOrganizationById(@Param('id') id: string): Promise<Organization> {
-    return this.organizationService.getOrganizationById(id);
+    return this.organizationService.getProfileById(id);
   }
 
   @Get('user/:userId')
@@ -50,7 +50,7 @@ export class OrganizationController {
     type: Organization,
   })
   async getOrganizationByUserId(@Param('userId') userId: string): Promise<Organization> {
-    return this.organizationService.getOrganizationByUserId(userId);
+    return this.organizationService.getProfileByUserId(userId);
   }
 
   @Put(':id')
@@ -62,9 +62,9 @@ export class OrganizationController {
   })
   async updateOrganization(
     @Param('id') id: string,
-    @Body() updateData: Partial<Organization>,
+    @Body() updateOrganizationDto: Partial<Organization>,
   ): Promise<Organization> {
-    return this.organizationService.updateOrganization(id, updateData);
+    return this.organizationService.updateProfile(id, updateOrganizationDto);
   }
 
   @Delete(':id')
@@ -74,7 +74,7 @@ export class OrganizationController {
     description: 'The organization profile has been successfully deleted.',
   })
   async deleteOrganization(@Param('id') id: string): Promise<boolean> {
-    return this.organizationService.deleteOrganization(id);
+    return this.organizationService.deleteProfile(id);
   }
 
   @Get()

@@ -14,6 +14,12 @@ export interface IUserRepository {
   findByEmail(email: string): Promise<User | null>;
 
   /**
+   * Find user by email, returns null if not found
+   * @param email User email
+   */
+  findByEmailOrNull(email: string): Promise<User | null>;
+
+  /**
    * Find user by ID
    * @param id User ID
    */
@@ -38,4 +44,10 @@ export interface IUserRepository {
    * @param userId User ID
    */
   verifyEmail(userId: string): Promise<User>;
+
+  /**
+   * Delete user by ID
+   * @param id User ID
+   */
+  deleteUser(id: string): Promise<void>;
 }

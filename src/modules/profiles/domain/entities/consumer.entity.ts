@@ -1,25 +1,21 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 import { Address } from './address.entity';
+import { Gender } from '../enums/gender.enum';
+import { MaritalStatus } from '../enums/marital-status.enum';
 
 export type ConsumerDocument = Consumer & Document;
 
-export enum Gender {
-  male = 'male',
-  female = 'female',
-  other = 'other',
-}
-
-export enum MaritalStatus {
-  single = 'single',
-  married = 'married',
-  divorced = 'divorced',
-  widowed = 'widowed',
-}
-
 @Schema({ timestamps: true })
 export class Consumer {
+  @ApiProperty({ description: 'Consumer MongoDB ID' })
+  _id?: Types.ObjectId;
+
+  @ApiProperty({ description: 'Consumer ID', required: false })
+  @Prop()
+  id?: string;
+
   @ApiProperty({ description: 'Home address information', type: Address })
   @Prop({ required: true, type: Address })
   homeAddress!: Address;
@@ -86,3 +82,5 @@ export class Consumer {
 }
 
 export const ConsumerSchema = SchemaFactory.createForClass(Consumer);
+
+// Remove the email index completely as email is handled in User entity

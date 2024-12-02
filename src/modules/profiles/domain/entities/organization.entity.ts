@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 import { OperatingHours } from './operating-hours.entity';
 import { Address } from './address.entity';
@@ -8,9 +8,12 @@ export type OrganizationDocument = Organization & Document;
 
 @Schema({ timestamps: true })
 export class Organization {
+  @ApiProperty({ description: 'Organization MongoDB ID' })
+  _id?: Types.ObjectId;
+
   @ApiProperty({ description: 'Organization ID' })
-  @Prop({ required: true })
-  id!: string;
+  @Prop()
+  id?: string;
 
   @ApiProperty({ description: 'Organization description' })
   @Prop({ required: true })
@@ -28,9 +31,9 @@ export class Organization {
   @Prop({ required: true, type: Address })
   address!: Address;
 
-  @ApiProperty({ description: 'Registration number' })
-  @Prop({ required: true })
-  registrationNumber!: string;
+  @ApiProperty({ description: 'Registration number', required: false })
+  @Prop()
+  registrationNumber?: string;
 
   @ApiProperty({ description: 'Services offered' })
   @Prop({ type: [String], required: true })

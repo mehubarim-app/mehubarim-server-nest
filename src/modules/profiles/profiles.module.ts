@@ -8,6 +8,7 @@ import { ConsumerService } from './application/services/consumer.service';
 import { OrganizationService } from './application/services/organization.service';
 import { OrganizationController } from './presentation/controllers/organization.controller';
 import { ConsumerController } from './presentation/controllers/consumer.controller';
+import { ProfileFactory } from './application/factories/profile.factory';
 
 @Module({
   imports: [
@@ -28,7 +29,8 @@ import { ConsumerController } from './presentation/controllers/consumer.controll
       provide: 'IOrganizationRepository',
       useClass: OrganizationRepository,
     },
+    ProfileFactory,
   ],
-  exports: [ConsumerService, OrganizationService],
+  exports: [ConsumerService, OrganizationService, ProfileFactory],
 })
 export class ProfilesModule {}
