@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Consumer } from '../../domain/entities/consumer.entity';
 import { IConsumerRepository } from '../../domain/repositories/consumer.repository.interface';
-import { CreateConsumerDto } from '../../domain/dto/create-consumer.dto';
+import { ConsumerProfileDataDto } from '../../domain/dto/consumer-profile.dto';
 
 @Injectable()
 export class ConsumerRepository implements IConsumerRepository {
@@ -12,9 +12,9 @@ export class ConsumerRepository implements IConsumerRepository {
     private readonly consumerModel: Model<Consumer>,
   ) {}
 
-  async create(createConsumerDto: CreateConsumerDto): Promise<Consumer> {
-    const consumer = new this.consumerModel(createConsumerDto);
-    return consumer.save();
+  async create(consumer: Partial<Consumer>): Promise<Consumer> {
+    const createdConsumer = new this.consumerModel(consumer);
+    return createdConsumer.save();
   }
 
   async findById(id: string): Promise<Consumer> {

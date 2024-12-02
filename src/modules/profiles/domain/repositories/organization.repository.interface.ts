@@ -1,8 +1,8 @@
 import { Organization } from '../entities/organization.entity';
-import { CreateOrganizationDto } from '../dto/create-organization.dto';
+import { OrganizationProfileDataDto } from '../dto/organization-profile.dto';
 
 export interface IOrganizationRepository {
-  create(createOrganizationDto: CreateOrganizationDto): Promise<Organization>;
+  create(organization: Partial<Organization>): Promise<Organization>;
   findById(id: string): Promise<Organization>;
   findByUserId(userId: string): Promise<Organization>;
   update(id: string, updateData: Partial<Organization>): Promise<Organization>;

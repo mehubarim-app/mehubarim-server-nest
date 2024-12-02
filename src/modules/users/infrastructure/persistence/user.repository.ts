@@ -49,6 +49,13 @@ export class UserRepository implements IUserRepository {
     return user;
   }
 
+  async findByEmailOrNull(email: string): Promise<User | null> {
+    return this.userModel
+      .findOne({ email })
+      .select('-password')
+      .exec();
+  }
+
   async update(id: string, updateData: Partial<User>): Promise<User> {
     const updatedUser = await this.userModel
       .findByIdAndUpdate(id, updateData, { new: true })
@@ -60,9 +67,11 @@ export class UserRepository implements IUserRepository {
     return updatedUser;
   }
 
-  async delete(id: string): Promise<boolean> {
+  async deleteUser(id: string): Promise<void> {
     const result = await this.userModel.deleteOne({ _id: id }).exec();
-    return result.deletedCount > 0;
+    if (result.deletedCount === 0) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
   }
 
   async findAll(): Promise<User[]> {

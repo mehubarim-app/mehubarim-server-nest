@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { ProfilesModule } from './modules/profiles/profiles.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { HealthModule } from './modules/health/health.module';
+import { UsersModule } from './modules/users/users.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { HealthModule } from './modules/health/health.module';
         };
       },
     }),
+    UsersModule,
     ProfilesModule,
     AuthModule,
     HealthModule,

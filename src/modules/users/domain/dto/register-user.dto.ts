@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsEnum, IsNotEmpty, IsString, MinLength } from 'class-validator';
+import { ExampleFactory } from '../../../shared/factories/example.factory';
+import { ProfileType } from '../../../profiles/domain/enums/profile-type.enum';
 
 export class RegisterUserDto {
   @ApiProperty({ 
@@ -29,12 +31,12 @@ export class RegisterUserDto {
 
   @ApiProperty({ 
     description: 'Type of profile',
-    enum: ['consumer', 'organization'],
-    example: 'consumer' 
+    enum: ProfileType,
+    enumName: 'ProfileType'
   })
-  @IsEnum(['consumer', 'organization'])
+  @IsEnum(ProfileType)
   @IsNotEmpty()
-  profileType: string;
+  profileType: ProfileType;
 
   @ApiProperty({ 
     description: 'Registration method',
@@ -44,4 +46,24 @@ export class RegisterUserDto {
   @IsEnum(['email', 'google', 'facebook', 'apple'])
   @IsNotEmpty()
   registeredVia: string;
+
+  static exampleConsumer(): RegisterUserDto {
+    const dto = new RegisterUserDto();
+    dto.email = ExampleFactory.getExampleConsumerEmail();
+    dto.password = ExampleFactory.getExamplePassword();
+    dto.fullName = ExampleFactory.getExampleConsumerName();
+    dto.profileType = ProfileType.CONSUMER;
+    dto.registeredVia = "email";
+    return dto;
+  }
+
+  static exampleOrganization(): RegisterUserDto {
+    const dto = new RegisterUserDto();
+    dto.email = ExampleFactory.getExampleOrganizationEmail();
+    dto.password = ExampleFactory.getExamplePassword();
+    dto.fullName = ExampleFactory.getExampleOrganizationName();
+    dto.profileType = ProfileType.ORGANIZATION;
+    dto.registeredVia = "email";
+    return dto;
+  }
 }

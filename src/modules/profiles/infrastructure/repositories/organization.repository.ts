@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Organization } from '../../domain/entities/organization.entity';
 import { IOrganizationRepository } from '../../domain/repositories/organization.repository.interface';
-import { CreateOrganizationDto } from '../../domain/dto/create-organization.dto';
+import { OrganizationProfileDataDto } from '../../domain/dto/organization-profile.dto';
 
 @Injectable()
 export class OrganizationRepository implements IOrganizationRepository {
@@ -12,9 +12,9 @@ export class OrganizationRepository implements IOrganizationRepository {
     private readonly organizationModel: Model<Organization>,
   ) {}
 
-  async create(createOrganizationDto: CreateOrganizationDto): Promise<Organization> {
-    const organization = new this.organizationModel(createOrganizationDto);
-    return organization.save();
+  async create(organization: Partial<Organization>): Promise<Organization> {
+    const createdOrganization = new this.organizationModel(organization);
+    return createdOrganization.save();
   }
 
   async findById(id: string): Promise<Organization> {

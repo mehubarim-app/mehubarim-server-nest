@@ -10,7 +10,6 @@ import {
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ConsumerService } from '@modules/profiles/application/services/consumer.service';
-import { CreateConsumerDto } from '@modules/profiles/domain/dto/create-consumer.dto';
 import { Consumer } from '@modules/profiles/domain/entities/consumer.entity';
 import { JwtAuthGuard } from '@modules/auth/guards/jwt-auth.guard';
 
@@ -20,16 +19,17 @@ import { JwtAuthGuard } from '@modules/auth/guards/jwt-auth.guard';
 export class ConsumerController {
   constructor(private readonly consumerService: ConsumerService) {}
 
-  @Post()
-  @ApiOperation({ summary: 'Create a new consumer profile' })
-  @ApiResponse({
-    status: 201,
-    description: 'The consumer profile has been successfully created.',
-    type: Consumer,
-  })
-  async createConsumer(@Body() createConsumerDto: CreateConsumerDto): Promise<Consumer> {
-    return this.consumerService.createConsumer(createConsumerDto);
-  }
+  // Removed direct creation of consumer profiles
+  // @Post()
+  // @ApiOperation({ summary: 'Create a new consumer profile' })
+  // @ApiResponse({
+  //   status: 201,
+  //   description: 'The consumer profile has been successfully created.',
+  //   type: Consumer,
+  // })
+  // async createConsumer(@Body() ConsumerDto: ConsumerDto): Promise<Consumer> {
+  //   return this.consumerService.createProfile(ConsumerDto);
+  // }
 
   @Get(':id')
   @ApiOperation({ summary: 'Get a consumer profile by ID' })
@@ -39,7 +39,7 @@ export class ConsumerController {
     type: Consumer,
   })
   async getConsumerById(@Param('id') id: string): Promise<Consumer> {
-    return this.consumerService.getConsumerById(id);
+    return this.consumerService.getProfileById(id);
   }
 
   @Get('user/:userId')
@@ -50,7 +50,7 @@ export class ConsumerController {
     type: Consumer,
   })
   async getConsumerByUserId(@Param('userId') userId: string): Promise<Consumer> {
-    return this.consumerService.getConsumerByUserId(userId);
+    return this.consumerService.getProfileByUserId(userId);
   }
 
   @Put(':id')
@@ -62,9 +62,9 @@ export class ConsumerController {
   })
   async updateConsumer(
     @Param('id') id: string,
-    @Body() updateData: Partial<Consumer>,
+    @Body() updateConsumerDto: Partial<Consumer>,
   ): Promise<Consumer> {
-    return this.consumerService.updateConsumer(id, updateData);
+    return this.consumerService.updateProfile(id, updateConsumerDto);
   }
 
   @Delete(':id')
@@ -74,7 +74,7 @@ export class ConsumerController {
     description: 'The consumer profile has been successfully deleted.',
   })
   async deleteConsumer(@Param('id') id: string): Promise<boolean> {
-    return this.consumerService.deleteConsumer(id);
+    return this.consumerService.deleteProfile(id);
   }
 
   @Get()
@@ -85,6 +85,6 @@ export class ConsumerController {
     type: [Consumer],
   })
   async getAllConsumers(): Promise<Consumer[]> {
-    return this.consumerService.getAllConsumers();
+    return this.consumerService.getAllProfiles();
   }
 }

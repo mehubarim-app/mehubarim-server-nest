@@ -4,8 +4,8 @@ import { TimeRange } from './time-range.entity';
 
 @Schema()
 export class OperatingHours {
-  @ApiProperty({ description: 'Day number (0-6, where 0 is Sunday)', minimum: 0, maximum: 6 })
-  @Prop({ required: true, min: 0, max: 6 })
+  @ApiProperty({ description: 'Day number (1-7, where 1 is Sunday and 7 is Saturday)', minimum: 1, maximum: 7 })
+  @Prop({ required: true, min: 1, max: 7 })
   dayNumber!: number;
 
   @ApiProperty({ description: 'Day of the week in Hebrew', example: 'ראשון' })
