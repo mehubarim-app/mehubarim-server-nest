@@ -107,8 +107,21 @@ jobs:
           script: |
             pm2 start npm --name "${{ env.APP_NAME }}" --cwd ${{ secrets.DEPLOY_DIR }}${{ env.APP_NAME }} -- run start:${{ env.APP_ENV }}
             pm2 save
-
-      # Health check
+      
+      # Health check with retries
       - name: Health check
         run: |
-          curl -X 'GET' 'http://ec2-98-83-207-140.compute-1.amazonaws.com:3000/health' -H 'accept: application/json' || exit 1
+          echo "Waiting for the app to start..."
+          RETRIES=5
+          COUNT=0
+          until curl -s -f -X 'GET' 'http://ec2-98-83-207-140.compute-1.amazonaws.com:3000/health' -H 'accept: application/json'; do
+            if [ $COUNT -lt $RETRIES ]; then
+              COUNT=$((COUNT+1))
+              echo "Retry $COUNT of $RETRIES..."
+              sleep 10  # Wait for 10 seconds before retrying
+            else
+              echo "Health check failed after $RETRIES attempts."
+              exit 1
+            fi
+          done
+          echo "Health check passed."
