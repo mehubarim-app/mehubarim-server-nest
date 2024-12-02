@@ -73,7 +73,7 @@ jobs:
             pm2 start npm --name "${{ env.APP_NAME }}" --cwd ${{ secrets.DEPLOY_DIR }}${{ env.APP_NAME }} -- run start:${{ env.APP_ENV }}
             pm2 save
 
-      # Optionally, you could also include a health check here if required
-      # - name: Health check
-      #   run: |
-      #     curl -f http://your-server-url/health || exit 1
+      # Health check here if required
+      - name: Health check
+        run: |
+           curl -X 'GET' 'http://localhost:3000/health' -H 'accept: application/json' || exit 1
