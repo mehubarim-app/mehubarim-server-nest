@@ -46,6 +46,10 @@ jobs:
     needs: build  # This ensures the deploy job runs only after the build job is successful
 
     steps:
+      - name: List workspace files
+        run: |
+          echo "Listing files in the workspace directory:"
+          ls -la /github/workspace
       # Stop the app using PM2 on the remote server
       - name: Stop app using PM2
         uses: appleboy/ssh-action@v0.1.5
