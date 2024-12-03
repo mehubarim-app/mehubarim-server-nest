@@ -12,6 +12,7 @@ import {
   IsArray,
   IsBoolean
 } from 'class-validator';
+import { ValidateIfNotEmptyString, ValidateIfNotEmptyArray } from '../../../../common/decorators/validate-if-not-empty.decorator';
 import { AddressDto } from './address.dto';
 import { Gender } from '../enums/gender.enum';
 import { MaritalStatus } from '../enums/marital-status.enum';
@@ -22,6 +23,7 @@ export class ConsumerProfileDataDto {
     description: 'Phone number',
     example: '+972501234567'
   })
+  @ValidateIfNotEmptyString()
   @IsString()
   @IsNotEmpty()
   phone: string;
@@ -31,6 +33,7 @@ export class ConsumerProfileDataDto {
     description: 'Gender of the user',
     example: Gender.MALE
   })
+  @ValidateIfNotEmptyString()
   @IsEnum(Gender)
   @IsNotEmpty()
   gender: Gender;
@@ -40,6 +43,7 @@ export class ConsumerProfileDataDto {
     description: 'Marital status of the user',
     example: MaritalStatus.SINGLE
   })
+  @ValidateIfNotEmptyString()
   @IsEnum(MaritalStatus)
   @IsNotEmpty()
   maritalStatus: MaritalStatus;
@@ -74,6 +78,7 @@ export class ConsumerProfileDataDto {
   })
   @IsArray()
   @IsString({ each: true })
+  @ValidateIfNotEmptyArray()
   @IsOptional()
   languages?: string[];
 
@@ -85,6 +90,7 @@ export class ConsumerProfileDataDto {
   })
   @IsArray()
   @IsString({ each: true })
+  @ValidateIfNotEmptyArray()
   @IsOptional()
   interests?: string[];
 
