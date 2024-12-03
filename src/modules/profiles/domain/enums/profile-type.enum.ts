@@ -1,4 +1,4 @@
 export enum ProfileType {
-  CONSUMER = 'consumer',
-  ORGANIZATION = 'organization'
+  consumer = 'consumer',
+  organization = 'organization'
 }

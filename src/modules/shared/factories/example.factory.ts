@@ -36,11 +36,11 @@ export class ExampleFactory {
   }
 
   static getExampleGender(): Gender {
-    return Gender.MALE;
+    return Gender.male;
   }
 
   static getExampleMaritalStatus(): MaritalStatus {
-    return MaritalStatus.SINGLE;
+    return MaritalStatus.single;
   }
 
   static getExamplePassword(): string {

@@ -83,4 +83,11 @@ export class Consumer {
 
 export const ConsumerSchema = SchemaFactory.createForClass(Consumer);
 
+// Explicitly remove the email index if it exists
+ConsumerSchema.indexes().forEach(index => {
+  if (index[0].email) {
+    ConsumerSchema.index({ email: 1 }, { unique: false });
+  }
+});
+
 // Remove the email index completely as email is handled in User entity
