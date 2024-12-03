@@ -20,16 +20,16 @@ import { JwtAuthGuard } from '@modules/auth/guards/jwt-auth.guard';
 export class OrganizationController {
   constructor(private readonly organizationService: OrganizationService) {}
 
-  @Post()
-  @ApiOperation({ summary: 'Create a new organization profile' })
-  @ApiResponse({
-    status: 201,
-    description: 'The organization profile has been successfully created.',
-    type: Organization,
-  })
-  async createOrganization(@Body() createOrganizationDto: OrganizationProfileDataDto): Promise<Organization> {
-    return this.organizationService.createProfile(createOrganizationDto);
-  }
+  // @Post()
+  // @ApiOperation({ summary: 'Create a new organization profile' })
+  // @ApiResponse({
+  //   status: 201,
+  //   description: 'The organization profile has been successfully created.',
+  //   type: Organization,
+  // })
+  // async createOrganization(@Body() createOrganizationDto: OrganizationProfileDataDto): Promise<Organization> {
+  //   return this.organizationService.createProfile(createOrganizationDto);
+  // }
 
   @Get(':id')
   @ApiOperation({ summary: 'Get an organization profile by ID' })
@@ -40,17 +40,6 @@ export class OrganizationController {
   })
   async getOrganizationById(@Param('id') id: string): Promise<Organization> {
     return this.organizationService.getProfileById(id);
-  }
-
-  @Get('user/:userId')
-  @ApiOperation({ summary: 'Get an organization profile by user ID' })
-  @ApiResponse({
-    status: 200,
-    description: 'The organization profile has been successfully retrieved.',
-    type: Organization,
-  })
-  async getOrganizationByUserId(@Param('userId') userId: string): Promise<Organization> {
-    return this.organizationService.getProfileByUserId(userId);
   }
 
   @Put(':id')
@@ -66,16 +55,27 @@ export class OrganizationController {
   ): Promise<Organization> {
     return this.organizationService.updateProfile(id, updateOrganizationDto);
   }
+  // @Get('user/:userId')
+  // @ApiOperation({ summary: 'Get an organization profile by user ID' })
+  // @ApiResponse({
+  //   status: 200,
+  //   description: 'The organization profile has been successfully retrieved.',
+  //   type: Organization,
+  // })
+  // async getOrganizationByUserId(@Param('userId') userId: string): Promise<Organization> {
+  //   return this.organizationService.getProfileByUserId(userId);
+  // }
 
-  @Delete(':id')
-  @ApiOperation({ summary: 'Delete an organization profile' })
-  @ApiResponse({
-    status: 200,
-    description: 'The organization profile has been successfully deleted.',
-  })
-  async deleteOrganization(@Param('id') id: string): Promise<boolean> {
-    return this.organizationService.deleteProfile(id);
-  }
+
+  // @Delete(':id')
+  // @ApiOperation({ summary: 'Delete an organization profile' })
+  // @ApiResponse({
+  //   status: 200,
+  //   description: 'The organization profile has been successfully deleted.',
+  // })
+  // async deleteOrganization(@Param('id') id: string): Promise<boolean> {
+  //   return this.organizationService.deleteProfile(id);
+  // }
 
   @Get()
   @ApiOperation({ summary: 'Get all organization profiles' })

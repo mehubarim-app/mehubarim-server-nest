@@ -42,17 +42,6 @@ export class ConsumerController {
     return this.consumerService.getProfileById(id);
   }
 
-  @Get('user/:userId')
-  @ApiOperation({ summary: 'Get a consumer profile by user ID' })
-  @ApiResponse({
-    status: 200,
-    description: 'The consumer profile has been successfully retrieved.',
-    type: Consumer,
-  })
-  async getConsumerByUserId(@Param('userId') userId: string): Promise<Consumer> {
-    return this.consumerService.getProfileByUserId(userId);
-  }
-
   @Put(':id')
   @ApiOperation({ summary: 'Update a consumer profile' })
   @ApiResponse({
@@ -67,24 +56,36 @@ export class ConsumerController {
     return this.consumerService.updateProfile(id, updateConsumerDto);
   }
 
-  @Delete(':id')
-  @ApiOperation({ summary: 'Delete a consumer profile' })
-  @ApiResponse({
-    status: 200,
-    description: 'The consumer profile has been successfully deleted.',
-  })
-  async deleteConsumer(@Param('id') id: string): Promise<boolean> {
-    return this.consumerService.deleteProfile(id);
-  }
+  // @Get('user/:userId')
+  // @ApiOperation({ summary: 'Get a consumer profile by user ID' })
+  // @ApiResponse({
+  //   status: 200,
+  //   description: 'The consumer profile has been successfully retrieved.',
+  //   type: Consumer,
+  // })
+  // async getConsumerByUserId(@Param('userId') userId: string): Promise<Consumer> {
+  //   return this.consumerService.getProfileByUserId(userId);
+  // }
 
-  @Get()
-  @ApiOperation({ summary: 'Get all consumer profiles' })
-  @ApiResponse({
-    status: 200,
-    description: 'All consumer profiles have been successfully retrieved.',
-    type: [Consumer],
-  })
-  async getAllConsumers(): Promise<Consumer[]> {
-    return this.consumerService.getAllProfiles();
-  }
+
+  // @Delete(':id')
+  // @ApiOperation({ summary: 'Delete a consumer profile' })
+  // @ApiResponse({
+  //   status: 200,
+  //   description: 'The consumer profile has been successfully deleted.',
+  // })
+  // async deleteConsumer(@Param('id') id: string): Promise<boolean> {
+  //   return this.consumerService.deleteProfile(id);
+  // }
+
+  // @Get()
+  // @ApiOperation({ summary: 'Get all consumer profiles' })
+  // @ApiResponse({
+  //   status: 200,
+  //   description: 'All consumer profiles have been successfully retrieved.',
+  //   type: [Consumer],
+  // })
+  // async getAllConsumers(): Promise<Consumer[]> {
+  //   return this.consumerService.getAllProfiles();
+  // }
 }
