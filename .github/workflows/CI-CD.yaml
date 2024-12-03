@@ -33,10 +33,10 @@ jobs:
         run: |
           if [[ $GITHUB_REF == "refs/heads/main" ]]; then
             echo "APP_NAME=mehubarim-server" >> $GITHUB_ENV
-            echo "APP_ENV=prod" >> $GITHUB_ENV
+            echo "NODE_ENV=production" >> $GITHUB_ENV
           elif [[ $GITHUB_REF == "refs/heads/dev" ]]; then
             echo "APP_NAME=mehubarim-server-dev" >> $GITHUB_ENV
-            echo "APP_ENV=dev" >> $GITHUB_ENV
+            echo "NODE_ENV=development" >> $GITHUB_ENV
             fi
       # Stop the app using PM2 on the remote server
       - name: Stop app using PM2
@@ -68,8 +68,7 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
-            pm2 start npm --name "${{ env.APP_NAME }}" --cwd ${{ secrets.DEPLOY_DIR }}${{ env.APP_NAME }} -- run start:${{ env.APP_ENV }}
-            pm2 save
+            pm2 start npm --name "${{ env.APP_NAME }}" --cwd ${{ secrets.DEPLOY_DIR }}${{ env.APP_NAME }} -- run NODE_ENV=${{ env.NODE_ENV }} node dist/main
       
       # Health check with retries
        #- name: Health check
