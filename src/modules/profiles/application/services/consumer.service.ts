@@ -16,12 +16,20 @@ export class ConsumerService implements ProfileService {
 
   async createProfile(consumerDto: ConsumerProfileDataDto): Promise<Consumer> {
     // Convert AddressDto to Address entity
-    const homeAddress = new Address(consumerDto.homeAddress);
-    homeAddress.generateNavigationLinks();
+    const homeAddress = consumerDto.homeAddress ? new Address(consumerDto.homeAddress) : undefined;
+    if (homeAddress) {
+      homeAddress.generateNavigationLinks();
+    }
+
+    const workAddress = consumerDto.workAddress ? new Address(consumerDto.workAddress) : undefined;
+    if (workAddress) {
+      workAddress.generateNavigationLinks();
+    }
 
     // Create consumer with required fields
     const consumer = new Consumer({
       homeAddress,
+      workAddress,
       phone: consumerDto.phone,
       gender: consumerDto.gender,
       maritalStatus: consumerDto.maritalStatus,

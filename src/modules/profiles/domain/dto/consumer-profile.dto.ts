@@ -49,13 +49,24 @@ export class ConsumerProfileDataDto {
   maritalStatus: MaritalStatus;
 
   @ApiProperty({ 
+    description: 'Home address',
     type: AddressDto,
-    example: ExampleFactory.getTelAvivAddress()
+    required: false
   })
   @ValidateNested()
   @Type(() => AddressDto)
-  @IsNotEmpty()
-  homeAddress: AddressDto;
+  @IsOptional()
+  homeAddress?: AddressDto;
+
+  @ApiProperty({ 
+    description: 'Work address',
+    type: AddressDto,
+    required: false
+  })
+  @ValidateNested()
+  @Type(() => AddressDto)
+  @IsOptional()
+  workAddress?: AddressDto;
 
   @ApiProperty({ 
     description: 'Age of the user',
