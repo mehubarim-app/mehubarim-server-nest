@@ -9,17 +9,15 @@ import {
 } from 'class-validator';
 import { AddressDto } from './address.dto';
 import { OperatingHoursByDayDto } from './operating_hours/operating-hours-by-day.dto';
-import { DayOfWeek } from '../enums/day-of-week.enum';
 import { ExampleFactory } from '../../../shared/factories/example.factory';
-import { ProfileType } from '../enums/profile-type.enum';
 
 export class OrganizationProfileDataDto {
   // @ApiProperty({ 
   //   description: 'Profile type discriminator',
   //   enum: ProfileType,
-  //   example: ProfileType.ORGANIZATION
+  //   example: ProfileType.organization
   // })
-  // readonly profileType: ProfileType.ORGANIZATION = ProfileType.ORGANIZATION;
+  // readonly profileType: ProfileType.organization = ProfileType.organization;
 
   @ApiProperty({ 
     description: 'Organization description',

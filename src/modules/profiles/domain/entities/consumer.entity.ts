@@ -17,35 +17,35 @@ export class Consumer {
   id?: string;
 
   @ApiProperty({ description: 'Home address information', type: Address })
-  @Prop({ required: true, type: Address })
-  homeAddress!: Address;
+  @Prop({ type: Address })
+  homeAddress?: Address;
 
   @ApiProperty({ description: 'Work address information', type: Address })
   @Prop({ type: Address })
   workAddress?: Address;
 
   @ApiProperty({ description: 'Phone number' })
-  @Prop({ required: true })
-  phone!: string;
+  @Prop()
+  phone?: string;
 
   @ApiProperty({ description: 'Gender', enum: Gender, enumName: 'Gender' })
-  @Prop({ required: true, enum: Gender, type: String })
-  gender!: Gender;
+  @Prop({ enum: Gender, type: String })
+  gender?: Gender;
 
   @ApiProperty({ description: 'Age', required: false })
   @Prop()
   age?: number;
 
   @ApiProperty({ description: 'Marital status', enum: MaritalStatus, enumName: 'MaritalStatus' })
-  @Prop({ required: true, enum: MaritalStatus, type: String })
-  maritalStatus!: MaritalStatus;
+  @Prop({ enum: MaritalStatus, type: String })
+  maritalStatus?: MaritalStatus;
 
   @ApiProperty({ description: 'Areas of interest' })
-  @Prop({ type: [String], required: true })
-  interests!: string[];
+  @Prop({ type: [String] })
+  interests?: string[];
 
   @ApiProperty({ description: 'Languages spoken' })
-  @Prop({ type: [String], required: false })
+  @Prop({ type: [String] })
   languages?: string[];
 
   @ApiProperty({ description: 'Profile image URL' })
@@ -82,5 +82,12 @@ export class Consumer {
 }
 
 export const ConsumerSchema = SchemaFactory.createForClass(Consumer);
+
+// Explicitly remove the email index if it exists
+ConsumerSchema.indexes().forEach(index => {
+  if (index[0].email) {
+    ConsumerSchema.index({ email: 1 }, { unique: false });
+  }
+});
 
 // Remove the email index completely as email is handled in User entity

@@ -12,6 +12,7 @@ import {
   IsArray,
   IsBoolean
 } from 'class-validator';
+import { ValidateIfNotEmptyString, ValidateIfNotEmptyArray } from '../../../../common/decorators/validate-if-not-empty.decorator';
 import { AddressDto } from './address.dto';
 import { Gender } from '../enums/gender.enum';
 import { MaritalStatus } from '../enums/marital-status.enum';
@@ -22,6 +23,7 @@ export class ConsumerProfileDataDto {
     description: 'Phone number',
     example: '+972501234567'
   })
+  @ValidateIfNotEmptyString()
   @IsString()
   @IsNotEmpty()
   phone: string;
@@ -29,8 +31,9 @@ export class ConsumerProfileDataDto {
   @ApiProperty({ 
     enum: Gender,
     description: 'Gender of the user',
-    example: Gender.MALE
+    example: Gender.male
   })
+  @ValidateIfNotEmptyString()
   @IsEnum(Gender)
   @IsNotEmpty()
   gender: Gender;
@@ -38,20 +41,32 @@ export class ConsumerProfileDataDto {
   @ApiProperty({ 
     enum: MaritalStatus,
     description: 'Marital status of the user',
-    example: MaritalStatus.SINGLE
+    example: MaritalStatus.single
   })
+  @ValidateIfNotEmptyString()
   @IsEnum(MaritalStatus)
   @IsNotEmpty()
   maritalStatus: MaritalStatus;
 
   @ApiProperty({ 
+    description: 'Home address',
     type: AddressDto,
-    example: ExampleFactory.getTelAvivAddress()
+    required: false
   })
   @ValidateNested()
   @Type(() => AddressDto)
-  @IsNotEmpty()
-  homeAddress: AddressDto;
+  @IsOptional()
+  homeAddress?: AddressDto;
+
+  @ApiProperty({ 
+    description: 'Work address',
+    type: AddressDto,
+    required: false
+  })
+  @ValidateNested()
+  @Type(() => AddressDto)
+  @IsOptional()
+  workAddress?: AddressDto;
 
   @ApiProperty({ 
     description: 'Age of the user',
@@ -74,6 +89,7 @@ export class ConsumerProfileDataDto {
   })
   @IsArray()
   @IsString({ each: true })
+  @ValidateIfNotEmptyArray()
   @IsOptional()
   languages?: string[];
 
@@ -85,6 +101,7 @@ export class ConsumerProfileDataDto {
   })
   @IsArray()
   @IsString({ each: true })
+  @ValidateIfNotEmptyArray()
   @IsOptional()
   interests?: string[];
 
@@ -108,8 +125,8 @@ export class ConsumerProfileDataDto {
   static example(): ConsumerProfileDataDto {
     const dto = new ConsumerProfileDataDto();
     dto.phone = '+972501234567';
-    dto.gender = Gender.MALE;
-    dto.maritalStatus = MaritalStatus.SINGLE;
+    dto.gender = Gender.male;
+    dto.maritalStatus = MaritalStatus.single;
     dto.homeAddress = ExampleFactory.getTelAvivAddress();
     dto.age = 25;
     dto.languages = ExampleFactory.getExampleLanguages();

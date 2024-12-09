@@ -9,7 +9,7 @@ export class ProfileDto {
   @ApiProperty({
     description: 'Type of profile',
     enum: ProfileType,
-    example: ProfileType.ORGANIZATION
+    example: ProfileType.organization
   })
   @IsEnum(ProfileType)
   @IsNotEmpty()
@@ -24,10 +24,10 @@ export class ProfileDto {
   })
   @ValidateNested()
   @Type((options) => {
-    if (options?.object?.profileType === ProfileType.ORGANIZATION) {
+    if (options?.object?.profileType === ProfileType.organization) {
       return OrganizationProfileDataDto;
     }
-    if (options?.object?.profileType === ProfileType.CONSUMER) {
+    if (options?.object?.profileType === ProfileType.consumer) {
       return ConsumerProfileDataDto;
     }
     return Object;

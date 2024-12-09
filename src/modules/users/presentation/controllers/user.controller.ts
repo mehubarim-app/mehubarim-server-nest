@@ -33,8 +33,8 @@ export class UserController {
   async registerUserWithOrganization(
     @Body() registerUserDto: RegisterUserWithProfileDto
   ): Promise<User> {
-    registerUserDto.user.profileType = ProfileType.ORGANIZATION;
-    registerUserDto.profile.profileType = ProfileType.ORGANIZATION;
+    registerUserDto.user.profileType = ProfileType.organization;
+    registerUserDto.profile.profileType = ProfileType.organization;
     return this.userService.register(registerUserDto.user, registerUserDto.profile);
   }
 
@@ -55,8 +55,8 @@ export class UserController {
   async registerUserWithConsumer(
     @Body() registerUserDto: RegisterUserWithProfileDto
   ): Promise<User> {
-    registerUserDto.user.profileType = ProfileType.CONSUMER;
-    registerUserDto.profile.profileType = ProfileType.CONSUMER;
+    registerUserDto.user.profileType = ProfileType.consumer;
+    registerUserDto.profile.profileType = ProfileType.consumer;
     return this.userService.register(registerUserDto.user, registerUserDto.profile);
   }
 }

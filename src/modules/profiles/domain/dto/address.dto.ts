@@ -1,14 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { ValidateIfNotEmptyString } from '../../../../common/decorators/validate-if-not-empty.decorator';
 import {
   IsString,
   IsNumber,
   IsOptional,
   IsUrl,
-  ValidateNested,
   IsNotEmpty,
   IsLatitude,
-  IsLongitude,
-  ValidateIf
+  IsLongitude
 } from 'class-validator';
 
 export class AddressDto {
@@ -88,7 +87,7 @@ export class AddressDto {
     example: AddressDto.examples.wazeLink,
     required: false
   })
-  @ValidateIf((object, value) => value !== undefined && value !== '')
+  @ValidateIfNotEmptyString()
   @IsUrl()
   @IsOptional()
   wazeLink?: string;
@@ -98,7 +97,7 @@ export class AddressDto {
     example: AddressDto.examples.googleMapsLink,
     required: false
   })
-  @ValidateIf((object, value) => value !== undefined && value !== '')
+  @ValidateIfNotEmptyString()
   @IsUrl()
   @IsOptional()
   googleMapsLink?: string;

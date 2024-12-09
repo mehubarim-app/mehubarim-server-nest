@@ -31,14 +31,14 @@ export class RegisterUserWithProfileDto {
     examples: {
       organization: {
         value: {
-          profileType: ProfileType.ORGANIZATION,
+          profileType: ProfileType.organization,
           profileData: OrganizationProfileDataDto.example()
         },
         description: "דוגמה לפרופיל ארגון"
       },
       consumer: {
         value: {
-          profileType: ProfileType.CONSUMER,
+          profileType: ProfileType.consumer,
           profileData: ConsumerProfileDataDto.example()
         },
         description: "דוגמה לפרופיל צרכן"
@@ -54,7 +54,7 @@ export class RegisterUserWithProfileDto {
     const dto = new RegisterUserWithProfileDto();
     dto.user = RegisterUserDto.exampleOrganization();
     dto.profile = {
-      profileType: ProfileType.ORGANIZATION,
+      profileType: ProfileType.organization,
       profileData: OrganizationProfileDataDto.example()
     };
     return dto;
@@ -64,7 +64,7 @@ export class RegisterUserWithProfileDto {
     const dto = new RegisterUserWithProfileDto();
     dto.user = RegisterUserDto.exampleConsumer();
     dto.profile = {
-      profileType: ProfileType.CONSUMER,
+      profileType: ProfileType.consumer,
       profileData: ConsumerProfileDataDto.example()
     };
     return dto;
