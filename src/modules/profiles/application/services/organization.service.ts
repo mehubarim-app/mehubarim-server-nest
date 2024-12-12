@@ -18,6 +18,21 @@ export class OrganizationService implements ProfileService {
   ) {}
 
   private convertWeeklySchedule(dto: OrganizationProfileDto): WeeklySchedule | undefined {
+  if (!dto.weeklySchedule) return undefined;
+
+  const daysOfWeek: (keyof WeeklySchedule)[] = [
+    'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'
+  ];
+
+  const schedule = daysOfWeek.reduce((acc, day) => {
+    if (dto.weeklySchedule[day]) {
+      acc[day] = this.convertDaySchedule(dto.weeklySchedule[day]);
+    }
+    return acc;
+  }, {} as Partial<WeeklySchedule>);
+
+  return new WeeklySchedule(schedule);
+}
     if (!dto.weeklySchedule) return undefined;
 
     return new WeeklySchedule({
