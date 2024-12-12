@@ -14,6 +14,12 @@ export interface IUserRepository {
   findByEmail(email: string): Promise<User | null>;
 
   /**
+   * Find user by email with password
+   * @param email User email
+   */
+  findByEmailWithPassword(email: string): Promise<User>;
+
+  /**
    * Find user by email, returns null if not found
    * @param email User email
    */

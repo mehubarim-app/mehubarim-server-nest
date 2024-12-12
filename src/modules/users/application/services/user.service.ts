@@ -100,6 +100,11 @@ export class UserService {
     }
   }
 
+  async findByEmailWithPassword(email: string): Promise<User> {
+    return this.userRepository.findByEmailWithPassword(email);
+  }
+
+
   /**
    * Find user by email
    * @param email User email
@@ -107,7 +112,7 @@ export class UserService {
   async findByEmailOrNull(email: string): Promise<User | null> {
     return this.userRepository.findByEmailOrNull(email);
   }
-  
+
   /**
    * Find user by ID
    * @param id User ID
