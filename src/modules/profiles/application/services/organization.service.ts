@@ -66,7 +66,35 @@ export class OrganizationService implements ProfileService {
     return address;
   }
 
-  private async createProfileInternal(createOrganizationDto: OrganizationProfileDto): Promise<Organization> {
+private async createProfileInternal(createOrganizationDto: OrganizationProfileDto): Promise<Organization> {
+  const { organizationName, description, phone, website, registrationNumber, services, targetAudience, languages, interests, notes, buildingImageUrl, logoUrl, socialLinks, isVerified, isActive, address, } = createOrganizationDto;
+
+  const convertedAddress = address ? this.convertAddress(address) : undefined;
+  const weeklySchedule = this.convertWeeklySchedule(createOrganizationDto);
+
+  const organization = new Organization({
+    organizationName,
+    description,
+    phone,
+    website,
+    address: convertedAddress,
+    registrationNumber,
+    services,
+    targetAudience,
+    languages,
+    interests,
+    notes,
+    weeklySchedule,
+    buildingImageUrl,
+    logoUrl,
+    socialLinks,
+    isVerified,
+    isActive
+  });
+
+  return this.organizationRepository.create(organization);
+}
+
     const address = createOrganizationDto.address ? 
       this.convertAddress(createOrganizationDto.address) : undefined;
 
