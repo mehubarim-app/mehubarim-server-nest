@@ -4,8 +4,8 @@ import { ValidateNested, IsNotEmpty } from 'class-validator';
 import { RegisterUserDto } from './register-user.dto';
 import { ProfileDto } from '../../../profiles/domain/dto/profile.dto';
 import { ProfileType } from '../../../profiles/domain/enums/profile-type.enum';
-import { ConsumerProfileDataDto } from '../../../profiles/domain/dto/consumer-profile.dto';
-import { OrganizationProfileDataDto } from '../../../profiles/domain/dto/organization-profile.dto';
+import { ConsumerProfileDto } from '../../../profiles/domain/dto/consumer-profile.dto';
+import { OrganizationProfileDto } from '../../../profiles/domain/dto/organization-profile.dto';
 
 export class RegisterUserWithProfileDto {
   @ApiProperty({ 
@@ -32,14 +32,14 @@ export class RegisterUserWithProfileDto {
       organization: {
         value: {
           profileType: ProfileType.organization,
-          profileData: OrganizationProfileDataDto.example()
+          profileData: OrganizationProfileDto.example()
         },
         description: "דוגמה לפרופיל ארגון"
       },
       consumer: {
         value: {
           profileType: ProfileType.consumer,
-          profileData: ConsumerProfileDataDto.example()
+          profileData: ConsumerProfileDto.example()
         },
         description: "דוגמה לפרופיל צרכן"
       }
@@ -55,7 +55,7 @@ export class RegisterUserWithProfileDto {
     dto.user = RegisterUserDto.exampleOrganization();
     dto.profile = {
       profileType: ProfileType.organization,
-      profileData: OrganizationProfileDataDto.example()
+      profileData: OrganizationProfileDto.example()
     };
     return dto;
   }
@@ -65,7 +65,7 @@ export class RegisterUserWithProfileDto {
     dto.user = RegisterUserDto.exampleConsumer();
     dto.profile = {
       profileType: ProfileType.consumer,
-      profileData: ConsumerProfileDataDto.example()
+      profileData: ConsumerProfileDto.example()
     };
     return dto;
   }

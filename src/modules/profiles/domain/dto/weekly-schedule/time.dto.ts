@@ -1,43 +1,43 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, Min, Max } from 'class-validator';
+import { IsInt, Min, Max } from 'class-validator';
 
 export class TimeDto {
   static readonly examples = {
     morning: {
-      start: { hour: 9, minute: 0 },
-      end: { hour: 13, minute: 0 }
+      start: { hours: 9, minutes: 0 },
+      end: { hours: 13, minutes: 0 }
     },
     evening: {
-      start: { hour: 16, minute: 0 },
-      end: { hour: 20, minute: 0 }
+      start: { hours: 16, minutes: 0 },
+      end: { hours: 20, minutes: 0 }
     }
   };
 
   @ApiProperty({
-    description: 'Hour (0-23)',
+    description: 'Hours (0-23)',
     minimum: 0,
     maximum: 23,
-    example: TimeDto.examples.morning.start.hour
+    example: TimeDto.examples.morning.start.hours
   })
-  @IsNumber()
+  @IsInt()
   @Min(0)
   @Max(23)
-  hour: number;
+  hours: number;
 
   @ApiProperty({
-    description: 'Minute (0-59)',
+    description: 'Minutes (0-59)',
     minimum: 0,
     maximum: 59,
-    example: TimeDto.examples.morning.start.minute
+    example: TimeDto.examples.morning.start.minutes
   })
-  @IsNumber()
+  @IsInt()
   @Min(0)
   @Max(59)
-  minute: number;
+  minutes: number;
 
   constructor() {
-    this.hour = 0;
-    this.minute = 0;
+    this.hours = 0;
+    this.minutes = 0;
   }
 
   static startExample(): TimeDto {
@@ -50,9 +50,5 @@ export class TimeDto {
     const dto = new TimeDto();
     Object.assign(dto, TimeDto.examples.morning.end);
     return dto;
-  }
-
-  static example(): TimeDto {
-    return TimeDto.startExample();
   }
 }

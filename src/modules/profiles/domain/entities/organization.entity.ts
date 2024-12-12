@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { OperatingHours } from './operating-hours.entity';
+import { WeeklySchedule } from './weekly-schedule.entity';
 import { Address } from './address.entity';
 
 export type OrganizationDocument = Organization & Document;
@@ -15,13 +15,17 @@ export class Organization {
   @Prop()
   id?: string;
 
+  @ApiProperty({ description: 'Organization name' })
+  @Prop({ required: true })
+  organizationName: string;
+
   @ApiProperty({ description: 'Organization description' })
   @Prop({ required: true })
-  description!: string;
+  description: string;
 
   @ApiProperty({ description: 'Contact phone number' })
   @Prop({ required: true })
-  phone!: string;
+  phone: string;
 
   @ApiProperty({ description: 'Website URL' })
   @Prop()
@@ -29,43 +33,38 @@ export class Organization {
 
   @ApiProperty({ description: 'Address information', type: Address })
   @Prop({ required: true, type: Address })
-  address!: Address;
+  address: Address;
 
-  @ApiProperty({ description: 'Registration number', required: false })
-  @Prop()
+  @ApiProperty({ description: 'Registration number' })
+  @Prop({ required: false })
   registrationNumber?: string;
 
   @ApiProperty({ description: 'Services offered' })
   @Prop({ type: [String], required: true })
-  services!: string[];
+  services: string[];
 
-  @ApiProperty({ description: 'Target audience' })
+  @ApiProperty({ 
+    description: 'Target audience (e.g., male, female, other)',
+    example: ['male', 'female']
+  })
   @Prop({ type: [String], required: true })
-  targetAudience!: string[];
+  targetAudience: string[];
 
   @ApiProperty({ description: 'Languages supported' })
   @Prop({ type: [String], required: true })
-  languages!: string[];
+  languages: string[];
 
   @ApiProperty({ description: 'Areas of interest' })
   @Prop({ type: [String], required: true })
-  interests!: string[];
+  interests: string[];
 
-  @ApiProperty({ description: 'Additional notes' })
+  @ApiProperty({ description: 'Notes about the organization' })
   @Prop()
   notes?: string;
 
-  @ApiProperty({ description: 'Operating hours', type: [OperatingHours] })
-  @Prop({ type: [OperatingHours], required: true })
-  operatingHours!: OperatingHours[];
-
-  @ApiProperty({ description: 'Profile verification status' })
-  @Prop({ default: false })
-  isVerified?: boolean;
-
-  @ApiProperty({ description: 'Profile active status' })
-  @Prop({ default: true })
-  isActive?: boolean;
+  @ApiProperty({ description: 'Weekly schedule', type: WeeklySchedule })
+  @Prop({ required: true, type: WeeklySchedule })
+  weeklySchedule: WeeklySchedule;
 
   @ApiProperty({ description: 'Building image URL' })
   @Prop()
@@ -77,7 +76,15 @@ export class Organization {
 
   @ApiProperty({ description: 'Social media links' })
   @Prop({ type: Map, of: String })
-  socialLinks!: Map<string, string>;
+  socialLinks: Map<string, string>;
+
+  @ApiProperty({ description: 'Is organization verified' })
+  @Prop({ default: false })
+  isVerified: boolean;
+
+  @ApiProperty({ description: 'Is organization active' })
+  @Prop({ default: true })
+  isActive: boolean;
 
   @ApiProperty({ description: 'Creation date' })
   createdAt?: Date;
@@ -86,7 +93,13 @@ export class Organization {
   updatedAt?: Date;
 
   constructor(partial: Partial<Organization>) {
-    Object.assign(this, partial);
+    Object.assign(this, {
+      isVerified: false,
+      isActive: true,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      ...partial
+    });
   }
 }
 

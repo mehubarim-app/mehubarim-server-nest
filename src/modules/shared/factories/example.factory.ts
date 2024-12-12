@@ -1,7 +1,7 @@
 import { AddressDto } from '../../profiles/domain/dto/address.dto';
 import { Gender } from '../../profiles/domain/enums/gender.enum';
 import { MaritalStatus } from '../../profiles/domain/enums/marital-status.enum';
-import { TimeDto } from '../../profiles/domain/dto/operating_hours/time.dto';
+import { TimeDto } from '../../profiles/domain/dto/weekly-schedule/time.dto';
 
 export class ExampleFactory {
   static createAddress(city: string, street: string, streetNumber: string, lat: number, lng: number): AddressDto {
@@ -65,15 +65,15 @@ export class ExampleFactory {
 
   static getTime(): TimeDto {
     const time = new TimeDto();
-    time.hour = 9;
-    time.minute = 0;
+    time.hours = 9;
+    time.minutes = 0;
     return time;
   }
 
   static getTimeRange() {
     return {
       start: this.getTime(),
-      end: { hour: 17, minute: 0 }
+      end: { hours: 17, minutes: 0 }
     };
   }
 

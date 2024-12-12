@@ -1,57 +1,41 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { 
-  IsString, 
-  IsOptional, 
-  IsEnum, 
-  ValidateNested,
-  IsNotEmpty,
-  IsNumber,
-  Min,
-  Max,
-  IsArray,
-  IsBoolean
-} from 'class-validator';
-import { ValidateIfNotEmptyString, ValidateIfNotEmptyArray } from '../../../../common/decorators/validate-if-not-empty.decorator';
+import { IsString, IsNumber, IsArray, ValidateNested, IsOptional, IsEnum, IsBoolean } from 'class-validator';
 import { AddressDto } from './address.dto';
 import { Gender } from '../enums/gender.enum';
 import { MaritalStatus } from '../enums/marital-status.enum';
-import { ExampleFactory } from '../../../shared/factories/example.factory';
 
-export class ConsumerProfileDataDto {
+export class ConsumerProfileDto {
+  static readonly examples = {
+    consumer: {
+      fullName: 'ישראל ישראלי',
+      homeAddress: AddressDto.jerusalemExample(),
+      workAddress: AddressDto.telAvivExample(),
+      phone: '+972501234567',
+      gender: Gender.male,
+      age: 25,
+      maritalStatus: MaritalStatus.single,
+      interests: ['תורה', 'הלכה', 'מוסר'],
+      languages: ['עברית', 'אנגלית'],
+      profileImageUrl: 'https://example.org/profile.jpg',
+      notes: 'מחפש חברותא ללימוד גמרא',
+      isVerified: false,
+      isActive: false
+    }
+  };
+
   @ApiProperty({ 
-    description: 'Phone number',
-    example: '+972501234567'
+    description: 'Full name',
+    example: ConsumerProfileDto.examples.consumer.fullName
   })
-  @ValidateIfNotEmptyString()
   @IsString()
-  @IsNotEmpty()
-  phone: string;
+  @IsOptional()
+  fullName?: string;
 
   @ApiProperty({ 
-    enum: Gender,
-    description: 'Gender of the user',
-    example: Gender.male
-  })
-  @ValidateIfNotEmptyString()
-  @IsEnum(Gender)
-  @IsNotEmpty()
-  gender: Gender;
-
-  @ApiProperty({ 
-    enum: MaritalStatus,
-    description: 'Marital status of the user',
-    example: MaritalStatus.single
-  })
-  @ValidateIfNotEmptyString()
-  @IsEnum(MaritalStatus)
-  @IsNotEmpty()
-  maritalStatus: MaritalStatus;
-
-  @ApiProperty({ 
-    description: 'Home address',
+    description: 'Home address information',
     type: AddressDto,
-    required: false
+    example: ConsumerProfileDto.examples.consumer.homeAddress
   })
   @ValidateNested()
   @Type(() => AddressDto)
@@ -59,9 +43,9 @@ export class ConsumerProfileDataDto {
   homeAddress?: AddressDto;
 
   @ApiProperty({ 
-    description: 'Work address',
+    description: 'Work address information',
     type: AddressDto,
-    required: false
+    example: ConsumerProfileDto.examples.consumer.workAddress
   })
   @ValidateNested()
   @Type(() => AddressDto)
@@ -69,45 +53,79 @@ export class ConsumerProfileDataDto {
   workAddress?: AddressDto;
 
   @ApiProperty({ 
-    description: 'Age of the user',
-    example: 25,
-    minimum: 18,
-    maximum: 120,
-    required: false
+    description: 'Phone number',
+    example: ConsumerProfileDto.examples.consumer.phone
+  })
+  @IsString()
+  @IsOptional()
+  phone?: string;
+
+  @ApiProperty({ 
+    description: 'Gender',
+    enum: Gender,
+    enumName: 'Gender',
+    example: ConsumerProfileDto.examples.consumer.gender
+  })
+  @IsEnum(Gender)
+  @IsOptional()
+  gender?: Gender;
+
+  @ApiProperty({ 
+    description: 'Age',
+    example: ConsumerProfileDto.examples.consumer.age
   })
   @IsNumber()
-  @Min(18)
-  @Max(120)
   @IsOptional()
   age?: number;
 
   @ApiProperty({ 
-    description: 'Languages spoken by the user',
-    type: [String],
-    example: ExampleFactory.getExampleLanguages(),
-    required: false
+    description: 'Marital status',
+    enum: MaritalStatus,
+    enumName: 'MaritalStatus',
+    example: ConsumerProfileDto.examples.consumer.maritalStatus
   })
-  @IsArray()
-  @IsString({ each: true })
-  @ValidateIfNotEmptyArray()
+  @IsEnum(MaritalStatus)
   @IsOptional()
-  languages?: string[];
+  maritalStatus?: MaritalStatus;
 
   @ApiProperty({ 
-    description: 'List of interests',
-    example: ['תורה', 'הלכה', 'מוסר'],
-    type: [String],
-    required: false
+    description: 'Areas of interest',
+    example: ConsumerProfileDto.examples.consumer.interests
   })
   @IsArray()
   @IsString({ each: true })
-  @ValidateIfNotEmptyArray()
   @IsOptional()
   interests?: string[];
 
   @ApiProperty({ 
-    description: 'Whether the user is verified',
+    description: 'Languages spoken',
+    example: ConsumerProfileDto.examples.consumer.languages
+  })
+  @IsArray()
+  @IsString({ each: true })
+  @IsOptional()
+  languages?: string[];
+
+  @ApiProperty({ 
+    description: 'Profile image URL',
+    example: ConsumerProfileDto.examples.consumer.profileImageUrl
+  })
+  @IsString()
+  @IsOptional()
+  profileImageUrl?: string;
+
+  @ApiProperty({ 
+    description: 'Notes about the consumer',
+    example: ConsumerProfileDto.examples.consumer.notes
+  })
+  @IsString()
+  @IsOptional()
+  notes?: string;
+
+  @ApiProperty({ 
+    description: 'Is consumer verified',
     example: false,
+    required: false,
     default: false
   })
   @IsBoolean()
@@ -115,24 +133,18 @@ export class ConsumerProfileDataDto {
   isVerified?: boolean = false;
 
   @ApiProperty({ 
-    description: 'Whether the user is looking for a match',
-    example: true
+    description: 'Is consumer active',
+    example: false,
+    required: false,
+    default: false
   })
   @IsBoolean()
   @IsOptional()
-  isLookingForMatch?: boolean;
+  isActive?: boolean = false;
 
-  static example(): ConsumerProfileDataDto {
-    const dto = new ConsumerProfileDataDto();
-    dto.phone = '+972501234567';
-    dto.gender = Gender.male;
-    dto.maritalStatus = MaritalStatus.single;
-    dto.homeAddress = ExampleFactory.getTelAvivAddress();
-    dto.age = 25;
-    dto.languages = ExampleFactory.getExampleLanguages();
-    dto.interests = ['תורה', 'הלכה', 'מוסר'];
-    dto.isVerified = false;
-    dto.isLookingForMatch = true;
+  static example(): ConsumerProfileDto {
+    const dto = new ConsumerProfileDto();
+    Object.assign(dto, ConsumerProfileDto.examples.consumer);
     return dto;
   }
 }

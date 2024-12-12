@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { OrganizationService } from '@modules/profiles/application/services/organization.service';
-import { OrganizationProfileDataDto } from '@modules/profiles/domain/dto/organization-profile.dto';
+import { OrganizationProfileDto } from '@modules/profiles/domain/dto/organization-profile.dto';
 import { Organization } from '@modules/profiles/domain/entities/organization.entity';
 import { JwtAuthGuard } from '@modules/auth/guards/jwt-auth.guard';
 
@@ -27,7 +27,7 @@ export class OrganizationController {
   //   description: 'The organization profile has been successfully created.',
   //   type: Organization,
   // })
-  // async createOrganization(@Body() createOrganizationDto: OrganizationProfileDataDto): Promise<Organization> {
+  // async createOrganization(@Body() createOrganizationDto: OrganizationProfileDto): Promise<Organization> {
   //   return this.organizationService.createProfile(createOrganizationDto);
   // }
 

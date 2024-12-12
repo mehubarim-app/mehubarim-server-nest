@@ -4,13 +4,13 @@ import { UserService } from '../../application/services/user.service';
 import { RegisterUserWithProfileDto } from '../../domain/dto/register-user-with-profile.dto';
 import { User } from '../../domain/entities/user.entity';
 import { JwtAuthGuard } from '../../../auth/guards/jwt-auth.guard';
-import { ConsumerProfileDataDto } from '../../../profiles/domain/dto/consumer-profile.dto';
-import { OrganizationProfileDataDto } from '../../../profiles/domain/dto/organization-profile.dto';
+import { ConsumerProfileDto } from '../../../profiles/domain/dto/consumer-profile.dto';
+import { OrganizationProfileDto } from '../../../profiles/domain/dto/organization-profile.dto';
 import { Public } from '../../../auth/decorators/public.decorator';
 import { ProfileType } from '../../../profiles/domain/enums/profile-type.enum';
 
 @ApiTags('users')
-@ApiExtraModels(ConsumerProfileDataDto, OrganizationProfileDataDto)
+@ApiExtraModels(ConsumerProfileDto, OrganizationProfileDto)
 @Controller('users')
 @UseGuards(JwtAuthGuard)
 export class UserController {

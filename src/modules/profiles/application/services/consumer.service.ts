@@ -3,7 +3,7 @@ import { Consumer } from '../../domain/entities/consumer.entity';
 import { Gender } from '../../domain/enums/gender.enum';
 import { MaritalStatus } from '../../domain/enums/marital-status.enum';
 import { IConsumerRepository } from '../../domain/repositories/consumer.repository.interface';
-import { ConsumerProfileDataDto } from '../../domain/dto/consumer-profile.dto';
+import { ConsumerProfileDto } from '../../domain/dto/consumer-profile.dto';
 import { ProfileService } from '../../domain/interfaces/profile.service.interface';
 import { Address } from '../../domain/entities/address.entity';
 
@@ -14,7 +14,7 @@ export class ConsumerService implements ProfileService {
     private readonly consumerRepository: IConsumerRepository
   ) {}
 
-  async createProfile(consumerDto: ConsumerProfileDataDto): Promise<Consumer> {
+  async createProfile(consumerDto: ConsumerProfileDto): Promise<Consumer> {
     // Convert AddressDto to Address entity
     const homeAddress = consumerDto.homeAddress ? new Address(consumerDto.homeAddress) : undefined;
     if (homeAddress) {

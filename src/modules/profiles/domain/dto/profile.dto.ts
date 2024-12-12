@@ -1,15 +1,26 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsEnum, IsNotEmpty, ValidateNested } from 'class-validator';
-import { ConsumerProfileDataDto } from './consumer-profile.dto';
-import { OrganizationProfileDataDto } from './organization-profile.dto';
+import { ConsumerProfileDto } from './consumer-profile.dto';
+import { OrganizationProfileDto } from './organization-profile.dto';
 import { ProfileType } from '../enums/profile-type.enum';
 
 export class ProfileDto {
+  static readonly examples = {
+    organization: {
+      profileType: ProfileType.organization,
+      profileData: OrganizationProfileDto.examples.organization
+    },
+    consumer: {
+      profileType: ProfileType.consumer,
+      profileData: ConsumerProfileDto.examples.consumer
+    }
+  };
+
   @ApiProperty({
     description: 'Type of profile',
     enum: ProfileType,
-    example: ProfileType.organization
+    example: ProfileDto.examples.organization.profileType
   })
   @IsEnum(ProfileType)
   @IsNotEmpty()
@@ -18,20 +29,33 @@ export class ProfileDto {
   @ApiProperty({ 
     description: 'Profile specific data',
     oneOf: [
-      { $ref: '#/components/schemas/ConsumerProfileDataDto' },
-      { $ref: '#/components/schemas/OrganizationProfileDataDto' }
-    ]
+      { $ref: '#/components/schemas/ConsumerProfileDto' },
+      { $ref: '#/components/schemas/OrganizationProfileDto' }
+    ],
+    example: ProfileDto.examples.organization.profileData
   })
   @ValidateNested()
   @Type((options) => {
     if (options?.object?.profileType === ProfileType.organization) {
-      return OrganizationProfileDataDto;
+      return OrganizationProfileDto;
     }
     if (options?.object?.profileType === ProfileType.consumer) {
-      return ConsumerProfileDataDto;
+      return ConsumerProfileDto;
     }
     return Object;
   })
   @IsNotEmpty()
-  profileData: ConsumerProfileDataDto | OrganizationProfileDataDto;
+  profileData: ConsumerProfileDto | OrganizationProfileDto;
+
+  static organizationExample(): ProfileDto {
+    const dto = new ProfileDto();
+    Object.assign(dto, ProfileDto.examples.organization);
+    return dto;
+  }
+
+  static consumerExample(): ProfileDto {
+    const dto = new ProfileDto();
+    Object.assign(dto, ProfileDto.examples.consumer);
+    return dto;
+  }
 }

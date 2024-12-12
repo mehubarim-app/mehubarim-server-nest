@@ -1,11 +1,11 @@
 import { Organization } from '../entities/organization.entity';
 import { Consumer } from '../entities/consumer.entity';
-import { OrganizationProfileDataDto } from '../dto/organization-profile.dto';
-import { ConsumerProfileDataDto } from '../dto/consumer-profile.dto';
+import { OrganizationProfileDto } from '../dto/organization-profile.dto';
+import { ConsumerProfileDto } from '../dto/consumer-profile.dto';
 
 export interface ProfileService {
   createProfile(
-    profileData: OrganizationProfileDataDto | ConsumerProfileDataDto,
+    profileData: OrganizationProfileDto | ConsumerProfileDto,
   ): Promise<Organization | Consumer>;
   
   updateProfile(
