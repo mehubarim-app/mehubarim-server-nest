@@ -10,7 +10,28 @@ import {
   IsLongitude
 } from 'class-validator';
 
-export class AddressDto {
+export const SWAGGER_EXAMPLE = {
+    telAviv: {
+      fullAddress: 'הרצל 1, תל אביב',
+      city: 'תל אביב',
+      street: 'הרצל',
+      streetNumber: '1',
+      latitude: 32.0853,
+      longitude: 34.7818,
+      wazeLink: 'https://waze.com/ul/hsv8z8jk7k',
+      googleMapsLink: 'https://goo.gl/maps/example1'
+    },
+    jerusalem: {
+      fullAddress: 'יפו 97, ירושלים',
+      city: 'ירושלים',
+      street: 'יפו',
+      streetNumber: '97',
+      latitude: 31.7857,
+      longitude: 35.2007,
+      wazeLink: 'https://waze.com/ul/hsv8z8jk7j',
+      googleMapsLink: 'https://goo.gl/maps/example2'
+    }
+  };
   static readonly examples = {
     telAviv: {
       fullAddress: 'הרצל 1, תל אביב',
