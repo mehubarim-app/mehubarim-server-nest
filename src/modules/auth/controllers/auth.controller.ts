@@ -2,19 +2,7 @@ import { Controller, Post, Body } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
 import { AuthService } from '../services/auth.service';
 import { Public } from '../decorators/public.decorator';
-import { IsEmail, IsString, MinLength } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
-
-export class LoginDto {
-  @ApiProperty({ example: 'user@example.com' })
-  @IsEmail()
-  email: string;
-
-  @ApiProperty({ example: '123456' })
-  @IsString()
-  @MinLength(6)
-  password: string;
-}
+import { LoginDto } from '../domain/dto/login.dto';
 
 @ApiTags('auth')
 @Controller('auth')

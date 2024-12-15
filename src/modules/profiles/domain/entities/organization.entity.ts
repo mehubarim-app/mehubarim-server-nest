@@ -39,10 +39,6 @@ export class Organization {
   @Prop({ required: false })
   registrationNumber?: string;
 
-  @ApiProperty({ description: 'Services offered' })
-  @Prop({ type: [String], required: true })
-  services: string[];
-
   @ApiProperty({ 
     description: 'Target audience (e.g., male, female, other)',
     example: ['male', 'female']

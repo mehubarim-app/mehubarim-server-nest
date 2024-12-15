@@ -16,7 +16,7 @@ export class DaySchedule {
     Object.assign(this, partial);
   }
 
-  get isActive(): boolean {
+  isActive(): boolean {
     return this.timeRanges.length > 0;
   }
 

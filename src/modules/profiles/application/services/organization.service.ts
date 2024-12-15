@@ -19,7 +19,6 @@ export class OrganizationService implements ProfileService {
 
   private convertWeeklySchedule(dto: OrganizationProfileDto): WeeklySchedule | undefined {
     if (!dto.weeklySchedule) return undefined;
-
     return new WeeklySchedule({
       sunday: dto.weeklySchedule.sunday ? this.convertDaySchedule(dto.weeklySchedule.sunday) : undefined,
       monday: dto.weeklySchedule.monday ? this.convertDaySchedule(dto.weeklySchedule.monday) : undefined,
@@ -30,7 +29,7 @@ export class OrganizationService implements ProfileService {
       saturday: dto.weeklySchedule.saturday ? this.convertDaySchedule(dto.weeklySchedule.saturday) : undefined
     });
   }
-
+  
   private convertDaySchedule(dto: DayScheduleDto): DaySchedule {
     return new DaySchedule({
       title: dto.title,
@@ -52,31 +51,27 @@ export class OrganizationService implements ProfileService {
   }
 
   private async createProfileInternal(createOrganizationDto: OrganizationProfileDto): Promise<Organization> {
-    const address = createOrganizationDto.address ? 
-      this.convertAddress(createOrganizationDto.address) : undefined;
-
+    const { organizationName, description, phone, website, registrationNumber, targetAudience, languages, interests, notes, buildingImageUrl, logoUrl, socialLinks, isVerified, isActive, address, } = createOrganizationDto;
+    const convertedAddress = address ? this.convertAddress(address) : undefined;
     const weeklySchedule = this.convertWeeklySchedule(createOrganizationDto);
-
     const organization = new Organization({
-      organizationName: createOrganizationDto.organizationName,
-      description: createOrganizationDto.description,
-      phone: createOrganizationDto.phone,
-      website: createOrganizationDto.website,
-      address,
-      registrationNumber: createOrganizationDto.registrationNumber,
-      services: createOrganizationDto.services,
-      targetAudience: createOrganizationDto.targetAudience,
-      languages: createOrganizationDto.languages,
-      interests: createOrganizationDto.interests,
-      notes: createOrganizationDto.notes,
+      organizationName,
+      description,
+      phone,
+      website,
+      address: convertedAddress,
+      registrationNumber,
+      targetAudience,
+      languages,
+      interests,
+      notes,
       weeklySchedule,
-      buildingImageUrl: createOrganizationDto.buildingImageUrl,
-      logoUrl: createOrganizationDto.logoUrl,
-      socialLinks: createOrganizationDto.socialLinks,
-      isVerified: createOrganizationDto.isVerified,
-      isActive: createOrganizationDto.isActive
+      buildingImageUrl,
+      logoUrl,
+      socialLinks,
+      isVerified,
+      isActive
     });
-
     return this.organizationRepository.create(organization);
   }
 

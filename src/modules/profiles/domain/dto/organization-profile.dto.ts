@@ -1,60 +1,40 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsString, IsArray, ValidateNested, IsOptional, IsBoolean, IsUrl } from 'class-validator';
+import { IsArray, IsBoolean, IsNotEmpty, IsString, IsUrl, ValidateNested, IsOptional } from 'class-validator';
 import { AddressDto } from './address.dto';
 import { WeeklyScheduleDto } from './weekly-schedule.dto';
+import { SWAGGER_EXAMPLES } from './constants';
 
 export class OrganizationProfileDto {
-  static readonly examples = {
-    organization: {
-      organizationName: 'ישיבת מאור התורה',
-      description: 'מרכז תורני לשיעורי תורה והלכה',
-      phone: '+972501234567',
-      website: 'https://example.org',
-      address: AddressDto.jerusalemExample(),
-      registrationNumber: '580123456',
-      services: ['שיעורי תורה', 'לימוד בחברותא', 'ספריה תורנית'],
-      targetAudience: ['אברכים', 'בעלי בתים', 'בחורי ישיבה'],
-      languages: ['עברית', 'אנגלית', 'יידיש'],
-      interests: ['תורה', 'הלכה', 'מוסר'],
-      notes: 'פתוח בכל ימות השבוע',
-      weeklySchedule: WeeklyScheduleDto.regularWeekExample(),
-      buildingImageUrl: 'https://example.org/building.jpg',
-      logoUrl: 'https://example.org/logo.png',
-      socialLinks: new Map([
-        ['facebook', 'https://facebook.com/example'],
-        ['whatsapp', 'https://wa.me/972501234567']
-      ]),
-      isVerified: true,
-      isActive: true
-    }
-  };
 
   @ApiProperty({ 
     description: 'Organization name',
-    example: OrganizationProfileDto.examples.organization.organizationName
+    example: SWAGGER_EXAMPLES.organization.organizationName
   })
   @IsString()
+  @IsNotEmpty()
   organizationName: string;
 
   @ApiProperty({ 
     description: 'Organization description',
-    example: OrganizationProfileDto.examples.organization.description
+    example: SWAGGER_EXAMPLES.organization.description
   })
   @IsString()
+  @IsNotEmpty()
   description: string;
 
   @ApiProperty({ 
     description: 'Contact phone number',
-    example: OrganizationProfileDto.examples.organization.phone
+    example: SWAGGER_EXAMPLES.organization.phone
   })
   @IsString()
+  @IsNotEmpty()
   phone: string;
 
   @ApiProperty({ 
     description: 'Website URL',
     required: false,
-    example: OrganizationProfileDto.examples.organization.website
+    example: SWAGGER_EXAMPLES.organization.website
   })
   @IsString()
   @IsOptional()
@@ -64,57 +44,54 @@ export class OrganizationProfileDto {
   @ApiProperty({ 
     description: 'Address information',
     type: AddressDto,
-    example: OrganizationProfileDto.examples.organization.address
+    example: SWAGGER_EXAMPLES.organization.address
   })
   @ValidateNested()
   @Type(() => AddressDto)
+  @IsNotEmpty()
   address: AddressDto;
 
   @ApiProperty({ 
     description: 'Registration number',
     required: false,
-    example: OrganizationProfileDto.examples.organization.registrationNumber
+    example: SWAGGER_EXAMPLES.organization.registrationNumber
   })
   @IsString()
   @IsOptional()
   registrationNumber?: string;
 
-  @ApiProperty({ 
-    description: 'Services offered',
-    example: OrganizationProfileDto.examples.organization.services
-  })
-  @IsArray()
-  @IsString({ each: true })
-  services: string[];
 
   @ApiProperty({ 
     description: 'Target audience',
-    example: OrganizationProfileDto.examples.organization.targetAudience
+    example: SWAGGER_EXAMPLES.organization.targetAudience
   })
   @IsArray()
   @IsString({ each: true })
+  @IsNotEmpty()
   targetAudience: string[];
 
   @ApiProperty({ 
     description: 'Languages supported',
-    example: OrganizationProfileDto.examples.organization.languages
+    example: SWAGGER_EXAMPLES.organization.languages
   })
   @IsArray()
   @IsString({ each: true })
+  @IsNotEmpty()
   languages: string[];
 
   @ApiProperty({ 
     description: 'Areas of interest',
-    example: OrganizationProfileDto.examples.organization.interests
+    example: SWAGGER_EXAMPLES.organization.interests
   })
   @IsArray()
   @IsString({ each: true })
+  @IsNotEmpty()
   interests: string[];
 
   @ApiProperty({ 
     description: 'Notes about the organization',
     required: false,
-    example: OrganizationProfileDto.examples.organization.notes
+    example: SWAGGER_EXAMPLES.organization.notes
   })
   @IsString()
   @IsOptional()
@@ -123,16 +100,17 @@ export class OrganizationProfileDto {
   @ApiProperty({ 
     description: 'Weekly schedule',
     type: WeeklyScheduleDto,
-    example: OrganizationProfileDto.examples.organization.weeklySchedule
+    example: SWAGGER_EXAMPLES.organization.weeklySchedule
   })
   @ValidateNested()
   @Type(() => WeeklyScheduleDto)
+  @IsNotEmpty()
   weeklySchedule: WeeklyScheduleDto;
 
   @ApiProperty({ 
     description: 'Building image URL',
     required: false,
-    example: OrganizationProfileDto.examples.organization.buildingImageUrl
+    example: SWAGGER_EXAMPLES.organization.buildingImageUrl
   })
   @IsString()
   @IsOptional()
@@ -141,7 +119,7 @@ export class OrganizationProfileDto {
   @ApiProperty({ 
     description: 'Logo URL',
     required: false,
-    example: OrganizationProfileDto.examples.organization.logoUrl
+    example: SWAGGER_EXAMPLES.organization.logoUrl
   })
   @IsString()
   @IsOptional()
@@ -150,7 +128,7 @@ export class OrganizationProfileDto {
   @ApiProperty({ 
     description: 'Social media links',
     required: false,
-    example: OrganizationProfileDto.examples.organization.socialLinks
+    example: SWAGGER_EXAMPLES.organization.socialLinks
   })
   @IsOptional()
   socialLinks?: Map<string, string>;
@@ -175,9 +153,15 @@ export class OrganizationProfileDto {
   @IsOptional()
   isActive?: boolean = false;
 
-  static example(): OrganizationProfileDto {
-    const dto = new OrganizationProfileDto();
-    Object.assign(dto, OrganizationProfileDto.examples.organization);
-    return dto;
+  constructor() {
+    this.organizationName = '';
+    this.description = '';
+    this.phone = '';
+    this.address = new AddressDto();
+    this.targetAudience = [];
+    this.languages = [];
+    this.interests = [];
+    this.weeklySchedule = new WeeklyScheduleDto();
+    this.socialLinks = new Map();
   }
 }

@@ -2,19 +2,12 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { TimeDto } from './time.dto';
+import { SWAGGER_EXAMPLES } from '../constants';
 
 export class TimeRangeDto {
-  static readonly examples = {
-    default: {
-      id: '1702347600000',
-      startTime: { hours: 9, minutes: 0 },
-      endTime: { hours: 17, minutes: 0 }
-    }
-  };
-
   @ApiProperty({ 
     description: 'Unique identifier (timestamp)',
-    example: TimeRangeDto.examples.default.id
+    example: SWAGGER_EXAMPLES.weeklySchedule.monday.timeRanges[0].id
   })
   @IsString()
   id: string;
@@ -22,7 +15,7 @@ export class TimeRangeDto {
   @ApiProperty({
     description: 'Start time',
     type: TimeDto,
-    example: TimeRangeDto.examples.default.startTime
+    example: SWAGGER_EXAMPLES.weeklySchedule.monday.timeRanges[0].startTime
   })
   @ValidateNested()
   @Type(() => TimeDto)
@@ -31,21 +24,15 @@ export class TimeRangeDto {
   @ApiProperty({
     description: 'End time',
     type: TimeDto,
-    example: TimeRangeDto.examples.default.endTime
+    example: SWAGGER_EXAMPLES.weeklySchedule.monday.timeRanges[0].endTime
   })
   @ValidateNested()
   @Type(() => TimeDto)
   endTime: TimeDto;
 
   constructor() {
-    this.id = '';
+    this.id = new Date().getTime().toString();
     this.startTime = new TimeDto();
     this.endTime = new TimeDto();
-  }
-
-  static example(): TimeRangeDto {
-    const dto = new TimeRangeDto();
-    Object.assign(dto, TimeRangeDto.examples.default);
-    return dto;
   }
 }

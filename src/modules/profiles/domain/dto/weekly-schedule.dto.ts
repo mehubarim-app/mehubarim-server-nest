@@ -1,43 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
+import { ValidateNested } from 'class-validator';
 import { DayScheduleDto } from './weekly-schedule/day-schedule.dto';
+import { SWAGGER_EXAMPLES } from './constants';
 
 export class WeeklyScheduleDto {
-  static readonly examples = {
-    default: {
-      sunday: { ...DayScheduleDto.examples.default, title: 'sunday' },
-      monday: { ...DayScheduleDto.examples.default, title: 'monday' },
-      tuesday: { ...DayScheduleDto.examples.default, title: 'tuesday' },
-      wednesday: { ...DayScheduleDto.examples.default, title: 'wednesday' },
-      thursday: { ...DayScheduleDto.examples.default, title: 'thursday' },
-      friday: { ...DayScheduleDto.examples.default, title: 'friday' },
-      saturday: { ...DayScheduleDto.examples.default, title: 'saturday' }
-    },
-    regularWeek: {
-      sunday: { title: 'sunday', timeRanges: [] },
-      monday: { title: 'monday', timeRanges: [{ id: '1702347600000', startTime: { hours: 9, minutes: 0 }, endTime: { hours: 17, minutes: 0 } }] },
-      tuesday: { title: 'tuesday', timeRanges: [{ id: '1702347600001', startTime: { hours: 9, minutes: 0 }, endTime: { hours: 17, minutes: 0 } }] },
-      wednesday: { title: 'wednesday', timeRanges: [{ id: '1702347600002', startTime: { hours: 9, minutes: 0 }, endTime: { hours: 17, minutes: 0 } }] },
-      thursday: { title: 'thursday', timeRanges: [{ id: '1702347600003', startTime: { hours: 9, minutes: 0 }, endTime: { hours: 17, minutes: 0 } }] },
-      friday: { title: 'friday', timeRanges: [{ id: '1702347600004', startTime: { hours: 9, minutes: 0 }, endTime: { hours: 13, minutes: 0 } }] },
-      saturday: { title: 'saturday', timeRanges: [] }
-    },
-    weekendClosed: {
-      sunday: { title: 'sunday', timeRanges: [] },
-      monday: { title: 'monday', timeRanges: [{ id: '1702347600000', startTime: { hours: 9, minutes: 0 }, endTime: { hours: 17, minutes: 0 } }] },
-      tuesday: { title: 'tuesday', timeRanges: [{ id: '1702347600001', startTime: { hours: 9, minutes: 0 }, endTime: { hours: 17, minutes: 0 } }] },
-      wednesday: { title: 'wednesday', timeRanges: [{ id: '1702347600002', startTime: { hours: 9, minutes: 0 }, endTime: { hours: 17, minutes: 0 } }] },
-      thursday: { title: 'thursday', timeRanges: [{ id: '1702347600003', startTime: { hours: 9, minutes: 0 }, endTime: { hours: 17, minutes: 0 } }] },
-      friday: { title: 'friday', timeRanges: [{ id: '1702347600004', startTime: { hours: 9, minutes: 0 }, endTime: { hours: 17, minutes: 0 } }] },
-      saturday: { title: 'saturday', timeRanges: [] }
-    }
-  };
-
   @ApiProperty({
     description: 'Sunday schedule',
     type: DayScheduleDto,
-    example: WeeklyScheduleDto.examples.regularWeek.sunday
+    example: SWAGGER_EXAMPLES.weeklySchedule.sunday
   })
   @ValidateNested()
   @Type(() => DayScheduleDto)
@@ -46,7 +17,7 @@ export class WeeklyScheduleDto {
   @ApiProperty({
     description: 'Monday schedule',
     type: DayScheduleDto,
-    example: WeeklyScheduleDto.examples.regularWeek.monday
+    example: SWAGGER_EXAMPLES.weeklySchedule.monday
   })
   @ValidateNested()
   @Type(() => DayScheduleDto)
@@ -55,7 +26,7 @@ export class WeeklyScheduleDto {
   @ApiProperty({
     description: 'Tuesday schedule',
     type: DayScheduleDto,
-    example: WeeklyScheduleDto.examples.regularWeek.tuesday
+    example: SWAGGER_EXAMPLES.weeklySchedule.tuesday
   })
   @ValidateNested()
   @Type(() => DayScheduleDto)
@@ -64,7 +35,7 @@ export class WeeklyScheduleDto {
   @ApiProperty({
     description: 'Wednesday schedule',
     type: DayScheduleDto,
-    example: WeeklyScheduleDto.examples.regularWeek.wednesday
+    example: SWAGGER_EXAMPLES.weeklySchedule.wednesday
   })
   @ValidateNested()
   @Type(() => DayScheduleDto)
@@ -73,7 +44,7 @@ export class WeeklyScheduleDto {
   @ApiProperty({
     description: 'Thursday schedule',
     type: DayScheduleDto,
-    example: WeeklyScheduleDto.examples.regularWeek.thursday
+    example: SWAGGER_EXAMPLES.weeklySchedule.thursday
   })
   @ValidateNested()
   @Type(() => DayScheduleDto)
@@ -82,7 +53,7 @@ export class WeeklyScheduleDto {
   @ApiProperty({
     description: 'Friday schedule',
     type: DayScheduleDto,
-    example: WeeklyScheduleDto.examples.regularWeek.friday
+    example: SWAGGER_EXAMPLES.weeklySchedule.friday
   })
   @ValidateNested()
   @Type(() => DayScheduleDto)
@@ -91,7 +62,7 @@ export class WeeklyScheduleDto {
   @ApiProperty({
     description: 'Saturday schedule',
     type: DayScheduleDto,
-    example: WeeklyScheduleDto.examples.regularWeek.saturday
+    example: SWAGGER_EXAMPLES.weeklySchedule.saturday
   })
   @ValidateNested()
   @Type(() => DayScheduleDto)
@@ -116,17 +87,5 @@ export class WeeklyScheduleDto {
     this.thursday = createDefaultDay('thursday');
     this.friday = createDefaultDay('friday');
     this.saturday = createDefaultDay('saturday');
-  }
-
-  static regularWeekExample(): WeeklyScheduleDto {
-    const dto = new WeeklyScheduleDto();
-    Object.assign(dto, WeeklyScheduleDto.examples.regularWeek);
-    return dto;
-  }
-
-  static weekendClosedExample(): WeeklyScheduleDto {
-    const dto = new WeeklyScheduleDto();
-    Object.assign(dto, WeeklyScheduleDto.examples.weekendClosed);
-    return dto;
   }
 }

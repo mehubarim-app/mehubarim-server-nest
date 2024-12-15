@@ -52,9 +52,6 @@ export class Consumer {
   @Prop({ type: [String] })
   languages?: string[];
 
-  @ApiProperty({ description: 'Profile image URL' })
-  @Prop()
-  profileImageUrl?: string;
 
   @ApiProperty({ description: 'Notes about the consumer' })
   @Prop()

@@ -1,51 +1,34 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsString, IsNumber, IsArray, ValidateNested, IsOptional, IsEnum, IsBoolean } from 'class-validator';
-import { AddressDto } from './address.dto';
+import { IsArray, IsBoolean, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, IsUrl, ValidateNested } from 'class-validator';
 import { Gender } from '../enums/gender.enum';
 import { MaritalStatus } from '../enums/marital-status.enum';
+import { AddressDto } from './address.dto';
+import { SWAGGER_EXAMPLES } from './constants';
 
 export class ConsumerProfileDto {
-  static readonly examples = {
-    consumer: {
-      fullName: 'ישראל ישראלי',
-      homeAddress: AddressDto.jerusalemExample(),
-      workAddress: AddressDto.telAvivExample(),
-      phone: '+972501234567',
-      gender: Gender.male,
-      age: 25,
-      maritalStatus: MaritalStatus.single,
-      interests: ['תורה', 'הלכה', 'מוסר'],
-      languages: ['עברית', 'אנגלית'],
-      profileImageUrl: 'https://example.org/profile.jpg',
-      notes: 'מחפש חברותא ללימוד גמרא',
-      isVerified: false,
-      isActive: false
-    }
-  };
-
   @ApiProperty({ 
     description: 'Full name',
-    example: ConsumerProfileDto.examples.consumer.fullName
+    example: SWAGGER_EXAMPLES.consumer.fullName
   })
   @IsString()
-  @IsOptional()
-  fullName?: string;
+  @IsNotEmpty()
+  fullName: string;
 
   @ApiProperty({ 
-    description: 'Home address information',
+    description: 'Home address',
     type: AddressDto,
-    example: ConsumerProfileDto.examples.consumer.homeAddress
+    example: SWAGGER_EXAMPLES.consumer.homeAddress
   })
   @ValidateNested()
   @Type(() => AddressDto)
-  @IsOptional()
-  homeAddress?: AddressDto;
+  homeAddress: AddressDto;
 
   @ApiProperty({ 
-    description: 'Work address information',
+    description: 'Work address',
     type: AddressDto,
-    example: ConsumerProfileDto.examples.consumer.workAddress
+    required: false,
+    example: SWAGGER_EXAMPLES.consumer.workAddress
   })
   @ValidateNested()
   @Type(() => AddressDto)
@@ -54,7 +37,8 @@ export class ConsumerProfileDto {
 
   @ApiProperty({ 
     description: 'Phone number',
-    example: ConsumerProfileDto.examples.consumer.phone
+    example: SWAGGER_EXAMPLES.consumer.phone,
+    required: false
   })
   @IsString()
   @IsOptional()
@@ -63,88 +47,86 @@ export class ConsumerProfileDto {
   @ApiProperty({ 
     description: 'Gender',
     enum: Gender,
-    enumName: 'Gender',
-    example: ConsumerProfileDto.examples.consumer.gender
+    example: SWAGGER_EXAMPLES.consumer.gender
   })
   @IsEnum(Gender)
-  @IsOptional()
-  gender?: Gender;
+  @IsNotEmpty()
+  gender: Gender;
 
   @ApiProperty({ 
     description: 'Age',
-    example: ConsumerProfileDto.examples.consumer.age
+    example: SWAGGER_EXAMPLES.consumer.age
   })
   @IsNumber()
-  @IsOptional()
-  age?: number;
+  @IsNotEmpty()
+  age: number;
 
   @ApiProperty({ 
     description: 'Marital status',
     enum: MaritalStatus,
-    enumName: 'MaritalStatus',
-    example: ConsumerProfileDto.examples.consumer.maritalStatus
+    example: SWAGGER_EXAMPLES.consumer.maritalStatus
   })
   @IsEnum(MaritalStatus)
-  @IsOptional()
-  maritalStatus?: MaritalStatus;
+  @IsNotEmpty()
+  maritalStatus: MaritalStatus;
 
   @ApiProperty({ 
-    description: 'Areas of interest',
-    example: ConsumerProfileDto.examples.consumer.interests
+    description: 'Interests',
+    type: [String],
+    example: SWAGGER_EXAMPLES.consumer.interests
   })
   @IsArray()
   @IsString({ each: true })
-  @IsOptional()
-  interests?: string[];
+  @IsNotEmpty()
+  interests: string[];
 
   @ApiProperty({ 
-    description: 'Languages spoken',
-    example: ConsumerProfileDto.examples.consumer.languages
+    description: 'Languages',
+    type: [String],
+    example: SWAGGER_EXAMPLES.consumer.languages
   })
   @IsArray()
   @IsString({ each: true })
-  @IsOptional()
-  languages?: string[];
+  @IsNotEmpty()
+  languages: string[];
+
 
   @ApiProperty({ 
-    description: 'Profile image URL',
-    example: ConsumerProfileDto.examples.consumer.profileImageUrl
-  })
-  @IsString()
-  @IsOptional()
-  profileImageUrl?: string;
-
-  @ApiProperty({ 
-    description: 'Notes about the consumer',
-    example: ConsumerProfileDto.examples.consumer.notes
+    description: 'Additional notes',
+    example: SWAGGER_EXAMPLES.consumer.notes,
+    required: false
   })
   @IsString()
   @IsOptional()
   notes?: string;
 
   @ApiProperty({ 
-    description: 'Is consumer verified',
-    example: false,
-    required: false,
-    default: false
+    description: 'Whether the consumer is verified',
+    example: SWAGGER_EXAMPLES.consumer.isVerified
   })
   @IsBoolean()
-  @IsOptional()
-  isVerified?: boolean = false;
+  @IsNotEmpty()
+  isVerified: boolean;
 
   @ApiProperty({ 
-    description: 'Is consumer active',
-    example: false,
-    required: false,
-    default: false
+    description: 'Whether the consumer is active',
+    example: SWAGGER_EXAMPLES.consumer.isActive
   })
   @IsBoolean()
-  @IsOptional()
-  isActive?: boolean = false;
+  @IsNotEmpty()
+  isActive: boolean;
 
-  static example(): ConsumerProfileDto {
-    const dto = new ConsumerProfileDto();
-    Object.assign(dto, ConsumerProfileDto.examples.consumer);
-    return dto;
+  constructor() {
+    this.fullName = '';
+    this.homeAddress = new AddressDto();
+    this.phone = '';
+    this.gender = Gender.male;
+    this.age = 0;
+    this.maritalStatus = MaritalStatus.single;
+    this.interests = [];
+    this.languages = [];
+    this.notes = '';
+    this.isVerified = false;
+    this.isActive = true;
   }
 }

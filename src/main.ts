@@ -31,6 +31,9 @@ async function bootstrap() {
   // Enable CORS
   app.enableCors();
 
+  // Set global prefix
+  app.setGlobalPrefix('api/v1');
+
   await app.listen(3000);
 }
 bootstrap();

@@ -8,6 +8,8 @@ import { ConsumerProfileDto } from '../../../profiles/domain/dto/consumer-profil
 import { OrganizationProfileDto } from '../../../profiles/domain/dto/organization-profile.dto';
 import { Public } from '../../../auth/decorators/public.decorator';
 import { ProfileType } from '../../../profiles/domain/enums/profile-type.enum';
+import { SWAGGER_EXAMPLES } from '../../../profiles/domain/dto/constants';
+import { RegisterUserDto } from '../../domain/dto/register-user.dto';
 
 @ApiTags('users')
 @ApiExtraModels(ConsumerProfileDto, OrganizationProfileDto)
@@ -25,7 +27,13 @@ export class UserController {
     type: RegisterUserWithProfileDto,
     examples: {
       organization: {
-        value: RegisterUserWithProfileDto.exampleOrganization(),
+        value: {
+          user: RegisterUserDto.exampleOrganization(),
+          profile: {
+            profileType: ProfileType.organization,
+            profileData: SWAGGER_EXAMPLES.organization
+          }
+        },
         description: "דוגמה לרישום ארגון"
       }
     }
@@ -47,7 +55,13 @@ export class UserController {
     type: RegisterUserWithProfileDto,
     examples: {
       consumer: {
-        value: RegisterUserWithProfileDto.exampleConsumer(),
+        value: {
+          user: RegisterUserDto.exampleConsumer(),
+          profile: {
+            profileType: ProfileType.consumer,
+            profileData: SWAGGER_EXAMPLES.consumer
+          }
+        },
         description: "דוגמה לרישום צרכן"
       }
     }

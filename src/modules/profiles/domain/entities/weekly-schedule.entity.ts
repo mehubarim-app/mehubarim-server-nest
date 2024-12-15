@@ -45,10 +45,10 @@ export class WeeklySchedule {
       this.thursday,
       this.friday,
       this.saturday
-    ].every(day => day.isValid());
+    ].every(day => day.isValid);
   }
 
-  get hasActivity(): boolean {
+  hasActivity(): boolean {
     return [
       this.sunday,
       this.monday,
