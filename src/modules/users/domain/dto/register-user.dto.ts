@@ -22,14 +22,6 @@ export class RegisterUserDto {
   password: string;
 
   @ApiProperty({ 
-    description: 'User full name',
-    example: 'John Doe' 
-  })
-  @IsString()
-  @IsNotEmpty()
-  fullName: string;
-
-  @ApiProperty({ 
     description: 'Type of profile',
     enum: ProfileType,
     enumName: 'ProfileType'
@@ -51,7 +43,6 @@ export class RegisterUserDto {
     const dto = new RegisterUserDto();
     dto.email = ExampleFactory.getExampleConsumerEmail();
     dto.password = ExampleFactory.getExamplePassword();
-    dto.fullName = ExampleFactory.getExampleConsumerName();
     dto.profileType = ProfileType.consumer;
     dto.registeredVia = "email";
     return dto;
@@ -61,7 +52,6 @@ export class RegisterUserDto {
     const dto = new RegisterUserDto();
     dto.email = ExampleFactory.getExampleOrganizationEmail();
     dto.password = ExampleFactory.getExamplePassword();
-    dto.fullName = ExampleFactory.getExampleOrganizationName();
     dto.profileType = ProfileType.organization;
     dto.registeredVia = "email";
     return dto;

@@ -4,24 +4,28 @@ import { Time } from './time.entity';
 
 @Schema()
 export class TimeRange {
+  @ApiProperty({ description: 'Unique identifier for the time range' })
+  @Prop({ required: true })
+  id: string;
+
   @ApiProperty({ description: 'Start time', type: Time })
   @Prop({ required: true, type: Time })
-  start!: Time;
+  startTime: Time;
 
   @ApiProperty({ description: 'End time', type: Time })
   @Prop({ required: true, type: Time })
-  end!: Time;
+  endTime: Time;
 
   constructor(partial: Partial<TimeRange>) {
     Object.assign(this, partial);
   }
 
   get startInMinutes(): number {
-    return this.start.totalMinutes;
+    return this.startTime.totalMinutes;
   }
 
   get endInMinutes(): number {
-    return this.end.totalMinutes;
+    return this.endTime.totalMinutes;
   }
 
   overlaps(other: TimeRange): boolean {
@@ -30,12 +34,14 @@ export class TimeRange {
   }
 
   isValid(): boolean {
-    return this.start.isValid() && 
-           this.end.isValid() && 
-           this.end.totalMinutes > this.start.totalMinutes;
+    return this.startTime.isValid() && 
+           this.endTime.isValid() && 
+           this.endTime.totalMinutes > this.startTime.totalMinutes;
   }
 
   toString(): string {
-    return `${this.start.formatted}-${this.end.formatted}`;
+    return `${this.startTime.formatted}-${this.endTime.formatted}`;
   }
 }
+
+export const TimeRangeSchema = SchemaFactory.createForClass(TimeRange);

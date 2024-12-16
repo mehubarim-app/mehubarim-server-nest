@@ -1,37 +1,38 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsEnum, IsNotEmpty, ValidateNested } from 'class-validator';
-import { ConsumerProfileDataDto } from './consumer-profile.dto';
-import { OrganizationProfileDataDto } from './organization-profile.dto';
 import { ProfileType } from '../enums/profile-type.enum';
+import { ConsumerProfileDto } from './consumer-profile.dto';
+import { OrganizationProfileDto } from './organization-profile.dto';
+import { SWAGGER_EXAMPLES } from './constants';
 
 export class ProfileDto {
-  @ApiProperty({
-    description: 'Type of profile',
+  @ApiProperty({ 
+    description: 'Profile type',
     enum: ProfileType,
-    example: ProfileType.organization
+    example: ProfileType.consumer
   })
   @IsEnum(ProfileType)
   @IsNotEmpty()
   profileType: ProfileType;
 
   @ApiProperty({ 
-    description: 'Profile specific data',
-    oneOf: [
-      { $ref: '#/components/schemas/ConsumerProfileDataDto' },
-      { $ref: '#/components/schemas/OrganizationProfileDataDto' }
-    ]
+    description: 'Profile data',
+    type: () => Object,
+    example: SWAGGER_EXAMPLES.consumer
   })
   @ValidateNested()
   @Type((options) => {
     if (options?.object?.profileType === ProfileType.organization) {
-      return OrganizationProfileDataDto;
+      return OrganizationProfileDto;
     }
-    if (options?.object?.profileType === ProfileType.consumer) {
-      return ConsumerProfileDataDto;
-    }
-    return Object;
+    return ConsumerProfileDto;
   })
   @IsNotEmpty()
-  profileData: ConsumerProfileDataDto | OrganizationProfileDataDto;
+  profileData: ConsumerProfileDto | OrganizationProfileDto;
+
+  constructor() {
+    this.profileType = ProfileType.consumer;
+    this.profileData = new ConsumerProfileDto();
+  }
 }

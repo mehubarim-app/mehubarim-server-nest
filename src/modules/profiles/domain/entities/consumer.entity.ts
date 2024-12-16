@@ -12,9 +12,13 @@ export class Consumer {
   @ApiProperty({ description: 'Consumer MongoDB ID' })
   _id?: Types.ObjectId;
 
-  @ApiProperty({ description: 'Consumer ID', required: false })
+  @ApiProperty({ description: 'Consumer ID' })
   @Prop()
   id?: string;
+
+  @ApiProperty({ description: 'Full name' })
+  @Prop()
+  fullName?: string;
 
   @ApiProperty({ description: 'Home address information', type: Address })
   @Prop({ type: Address })
@@ -32,7 +36,7 @@ export class Consumer {
   @Prop({ enum: Gender, type: String })
   gender?: Gender;
 
-  @ApiProperty({ description: 'Age', required: false })
+  @ApiProperty({ description: 'Age' })
   @Prop()
   age?: number;
 
@@ -48,21 +52,18 @@ export class Consumer {
   @Prop({ type: [String] })
   languages?: string[];
 
-  @ApiProperty({ description: 'Profile image URL' })
-  @Prop()
-  profileImageUrl?: string;
 
-  @ApiProperty({ description: 'Additional notes' })
+  @ApiProperty({ description: 'Notes about the consumer' })
   @Prop()
   notes?: string;
 
-  @ApiProperty({ description: 'Is profile verified' })
+  @ApiProperty({ description: 'Is consumer verified' })
   @Prop({ default: false })
-  isVerified?: boolean;
+  isVerified: boolean;
 
-  @ApiProperty({ description: 'Is profile active' })
+  @ApiProperty({ description: 'Is consumer active' })
   @Prop({ default: true })
-  isActive?: boolean;
+  isActive: boolean;
 
   @ApiProperty({ description: 'Creation date' })
   createdAt?: Date;
@@ -82,12 +83,3 @@ export class Consumer {
 }
 
 export const ConsumerSchema = SchemaFactory.createForClass(Consumer);
-
-// Explicitly remove the email index if it exists
-ConsumerSchema.indexes().forEach(index => {
-  if (index[0].email) {
-    ConsumerSchema.index({ email: 1 }, { unique: false });
-  }
-});
-
-// Remove the email index completely as email is handled in User entity

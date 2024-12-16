@@ -1,11 +1,14 @@
 import { Injectable, NotFoundException, Inject } from '@nestjs/common';
 import { Organization } from '../../domain/entities/organization.entity';
 import { IOrganizationRepository } from '../../domain/repositories/organization.repository.interface';
-import { OrganizationProfileDataDto } from '../../domain/dto/organization-profile.dto';
+import { OrganizationProfileDto } from '../../domain/dto/organization-profile.dto';
 import { ProfileService } from '../../domain/interfaces/profile.service.interface';
-import { OperatingHours } from '../../domain/entities/operating-hours.entity';
-import { TimeRange } from '../../domain/entities/time-range.entity';
+import { WeeklySchedule } from '../../domain/entities/weekly-schedule.entity';
 import { Address } from '../../domain/entities/address.entity';
+import { DayScheduleDto } from '../../domain/dto/weekly-schedule/day-schedule.dto';
+import { DaySchedule } from '../../domain/entities/weekly-schedule/day-schedule.entity';
+import { TimeRange } from '../../domain/entities/weekly-schedule/time-range.entity';
+import { Time } from '../../domain/entities/weekly-schedule/time.entity';
 
 @Injectable()
 export class OrganizationService implements ProfileService {
@@ -14,32 +17,35 @@ export class OrganizationService implements ProfileService {
     private readonly organizationRepository: IOrganizationRepository
   ) {}
 
-  private convertOperatingHours(dto: OrganizationProfileDataDto): OperatingHours[] {
-    const daysMap = {
-      sunday: { dayNumber: 1, dayOfWeek: 'ראשון' },
-      monday: { dayNumber: 2, dayOfWeek: 'שני' },
-      tuesday: { dayNumber: 3, dayOfWeek: 'שלישי' },
-      wednesday: { dayNumber: 4, dayOfWeek: 'רביעי' },
-      thursday: { dayNumber: 5, dayOfWeek: 'חמישי' },
-      friday: { dayNumber: 6, dayOfWeek: 'שישי' },
-      saturday: { dayNumber: 7, dayOfWeek: 'שבת' }
-    };
-
-    const operatingHours: OperatingHours[] = [];
-    
-    if (dto.operatingHours) {
-      for (const [day, hours] of Object.entries(dto.operatingHours)) {
-        if (hours && daysMap[day]) {
-          const timeRanges = hours.ranges.map(range => new TimeRange(range));
-          operatingHours.push(new OperatingHours({
-            ...daysMap[day],
-            timeRanges
-          }));
-        }
-      }
-    }
-
-    return operatingHours;
+  private convertWeeklySchedule(dto: OrganizationProfileDto): WeeklySchedule | undefined {
+	  if (!dto.weeklySchedule) return undefined;
+	
+	  const daysOfWeek: (keyof WeeklySchedule)[] = [
+	    'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'
+	  ];
+	
+	  const schedule = daysOfWeek.reduce((acc, day) => {
+	    if (dto.weeklySchedule[day]) {
+	      (acc[day] as DaySchedule) = this.convertDaySchedule(dto.weeklySchedule[day]);
+	    }
+	    return acc;
+	  }, {} as Partial<WeeklySchedule>);
+	
+	  return new WeeklySchedule(schedule);
+	}
+  
+  private convertDaySchedule(dto: DayScheduleDto): DaySchedule {
+    return new DaySchedule({
+      title: dto.title,
+      timeRanges: dto.timeRanges.map(range => {
+        const timeRange = new TimeRange({
+          startTime: new Time(range.startTime),
+          endTime: new Time(range.endTime)
+        });
+        timeRange.id = range.id || Date.now().toString();
+        return timeRange;
+      })
+    });
   }
 
   private convertAddress(addressDto: any): Address {
@@ -48,27 +54,36 @@ export class OrganizationService implements ProfileService {
     return address;
   }
 
-  private async createProfileInternal(createOrganizationDto: OrganizationProfileDataDto): Promise<Organization> {
-    const operatingHours = this.convertOperatingHours(createOrganizationDto);
-    const address = this.convertAddress(createOrganizationDto.address);
-
-    const organizationData = {
-      description: createOrganizationDto.description,
-      phone: createOrganizationDto.phone,
-      website: createOrganizationDto.website,
-      registrationNumber: createOrganizationDto.registrationNumber,
-      address,
-      operatingHours
-    };
-
-    return this.organizationRepository.create(organizationData);
+  private async createProfileInternal(createOrganizationDto: OrganizationProfileDto): Promise<Organization> {
+    const { organizationName, description, phone, website, registrationNumber, targetAudience, languages, interests, notes, buildingImageUrl, logoUrl, socialLinks, isVerified, isActive, address, } = createOrganizationDto;
+    const convertedAddress = address ? this.convertAddress(address) : undefined;
+    const weeklySchedule = this.convertWeeklySchedule(createOrganizationDto);
+    const organization = new Organization({
+      organizationName,
+      description,
+      phone,
+      website,
+      address: convertedAddress,
+      registrationNumber,
+      targetAudience,
+      languages,
+      interests,
+      notes,
+      weeklySchedule,
+      buildingImageUrl,
+      logoUrl,
+      socialLinks,
+      isVerified,
+      isActive
+    });
+    return this.organizationRepository.create(organization);
   }
 
-  async createProfile(createOrganizationDto: OrganizationProfileDataDto): Promise<Organization> {
+  async createProfile(organizationDto: OrganizationProfileDto): Promise<Organization> {
     // Check if the caller is UserService by examining the stack trace
     const stack = new Error().stack;
     if (stack && stack.includes('UserService')) {
-      return this.createProfileInternal(createOrganizationDto);
+      return this.createProfileInternal(organizationDto);
     }
     throw new Error('Direct profile creation is not allowed. Use UserService to create profiles.');
   }

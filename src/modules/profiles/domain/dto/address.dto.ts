@@ -9,22 +9,13 @@ import {
   IsLatitude,
   IsLongitude
 } from 'class-validator';
+import { SWAGGER_EXAMPLES } from './constants';
 
 export class AddressDto {
-  static readonly examples = {
-    fullAddress: 'הרצל 1, תל אביב',
-    city: 'תל אביב',
-    street: 'הרצל',
-    streetNumber: '1',
-    latitude: 32.0853,
-    longitude: 34.7818,
-    wazeLink: 'https://waze.com/ul/hsv8z8jk7k',
-    googleMapsLink: 'https://goo.gl/maps/example1'
-  };
 
   @ApiProperty({ 
     description: 'Full address string',
-    example: AddressDto.examples.fullAddress
+    example: SWAGGER_EXAMPLES.address.telAviv.fullAddress
   })
   @IsString()
   @IsNotEmpty()
@@ -32,7 +23,7 @@ export class AddressDto {
 
   @ApiProperty({ 
     description: 'City name',
-    example: AddressDto.examples.city
+    example: SWAGGER_EXAMPLES.address.telAviv.city
   })
   @IsString()
   @IsNotEmpty()
@@ -40,7 +31,7 @@ export class AddressDto {
 
   @ApiProperty({ 
     description: 'Street name',
-    example: AddressDto.examples.street
+    example: SWAGGER_EXAMPLES.address.telAviv.street
   })
   @IsString()
   @IsNotEmpty()
@@ -48,14 +39,14 @@ export class AddressDto {
 
   @ApiProperty({ 
     description: 'Street number',
-    example: AddressDto.examples.streetNumber
+    example: SWAGGER_EXAMPLES.address.telAviv.streetNumber
   })
   @IsString()
   @IsNotEmpty()
   streetNumber: string;
 
   @ApiProperty({ 
-    description: 'Neighborhood',
+    description: 'Neighborhood name',
     required: false
   })
   @IsString()
@@ -64,56 +55,41 @@ export class AddressDto {
 
   @ApiProperty({ 
     description: 'Latitude coordinate',
-    example: AddressDto.examples.latitude,
-    minimum: -90,
-    maximum: 90
+    example: SWAGGER_EXAMPLES.address.telAviv.latitude
   })
   @IsNumber()
   @IsLatitude()
+  @IsNotEmpty()
   latitude: number;
 
   @ApiProperty({ 
     description: 'Longitude coordinate',
-    example: AddressDto.examples.longitude,
-    minimum: -180,
-    maximum: 180
+    example: SWAGGER_EXAMPLES.address.telAviv.longitude
   })
   @IsNumber()
   @IsLongitude()
+  @IsNotEmpty()
   longitude: number;
 
   @ApiProperty({ 
-    description: 'Waze link',
-    example: AddressDto.examples.wazeLink,
-    required: false
+    description: 'Waze navigation link',
+    required: false,
+    example: SWAGGER_EXAMPLES.address.telAviv.wazeLink
   })
-  @ValidateIfNotEmptyString()
+  @IsString()
   @IsUrl()
   @IsOptional()
   wazeLink?: string;
 
   @ApiProperty({ 
     description: 'Google Maps link',
-    example: AddressDto.examples.googleMapsLink,
-    required: false
+    required: false,
+    example: SWAGGER_EXAMPLES.address.telAviv.googleMapsLink
   })
-  @ValidateIfNotEmptyString()
+  @IsString()
   @IsUrl()
   @IsOptional()
   googleMapsLink?: string;
-
-  static example(): AddressDto {
-    return {
-      fullAddress: AddressDto.examples.fullAddress,
-      city: AddressDto.examples.city,
-      street: AddressDto.examples.street,
-      streetNumber: AddressDto.examples.streetNumber,
-      latitude: AddressDto.examples.latitude,
-      longitude: AddressDto.examples.longitude,
-      wazeLink: AddressDto.examples.wazeLink,
-      googleMapsLink: AddressDto.examples.googleMapsLink
-    };
-  }
 
   constructor() {
     this.fullAddress = '';
@@ -123,7 +99,5 @@ export class AddressDto {
     this.latitude = 0;
     this.longitude = 0;
     this.neighborhood = '';
-    this.wazeLink = '';
-    this.googleMapsLink = '';
   }
 }

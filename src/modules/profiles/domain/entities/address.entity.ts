@@ -3,52 +3,64 @@ import { ApiProperty } from '@nestjs/swagger';
 
 @Schema()
 export class Address {
-  @ApiProperty({ description: 'Full address string' })
+  @ApiProperty({ description: 'Complete address string including all components' })
   @Prop({ required: true })
-  fullAddress!: string;
+  fullAddress: string;
 
-  @ApiProperty({ description: 'City name' })
+  @ApiProperty({ description: 'Name of the city' })
   @Prop({ required: true })
-  city!: string;
+  city: string;
 
-  @ApiProperty({ description: 'Street name' })
+  @ApiProperty({ description: 'Name of the street' })
   @Prop({ required: true })
-  street!: string;
+  street: string;
 
-  @ApiProperty({ description: 'Street number' })
+  @ApiProperty({ description: 'Street number or house number' })
   @Prop({ required: true })
-  streetNumber!: string;
+  streetNumber: string;
 
-  @ApiProperty({ description: 'Neighborhood', required: false })
+  @ApiProperty({ description: 'Name of the neighborhood or district', required: false })
   @Prop()
   neighborhood?: string;
 
-  @ApiProperty({ description: 'Latitude coordinate' })
+  @ApiProperty({ description: 'Geographic latitude coordinate', example: 32.0853 })
   @Prop({ required: true })
-  latitude!: number;
+  latitude: number;
 
-  @ApiProperty({ description: 'Longitude coordinate' })
+  @ApiProperty({ description: 'Geographic longitude coordinate', example: 34.7818 })
   @Prop({ required: true })
-  longitude!: number;
+  longitude: number;
 
-  @ApiProperty({ description: 'Waze link', required: false })
+  @ApiProperty({ description: 'Direct link to location in Waze', required: false })
   @Prop()
   wazeLink?: string;
 
-  @ApiProperty({ description: 'Google Maps link', required: false })
+  @ApiProperty({ description: 'Direct link to location in Google Maps', required: false })
   @Prop()
   googleMapsLink?: string;
 
   constructor(partial: Partial<Address>) {
-    Object.assign(this, partial);
+    // Default coordinates for Tel Aviv if none provided
+    const defaultCoords = {
+      latitude: 32.0853,
+      longitude: 34.7818
+    };
+
+    Object.assign(this, {
+      ...defaultCoords,
+      ...partial
+    });
+
+    // Generate navigation links if coordinates are available
+    if (this.latitude && this.longitude) {
+      this.generateNavigationLinks();
+    }
   }
 
   // Helper method to generate navigation links
   generateNavigationLinks(): void {
-    if (this.latitude && this.longitude) {
-      this.googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${this.latitude},${this.longitude}`;
-      this.wazeLink = `https://www.waze.com/ul?ll=${this.latitude},${this.longitude}&navigate=yes`;
-    }
+    this.googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${this.latitude},${this.longitude}`;
+    this.wazeLink = `https://www.waze.com/ul?ll=${this.latitude},${this.longitude}&navigate=yes`;
   }
 }
 

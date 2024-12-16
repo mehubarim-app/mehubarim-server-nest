@@ -1,5 +1,5 @@
 import { Organization } from '../entities/organization.entity';
-import { OrganizationProfileDataDto } from '../dto/organization-profile.dto';
+import { OrganizationProfileDto } from '../dto/organization-profile.dto';
 
 export interface IOrganizationRepository {
   create(organization: Partial<Organization>): Promise<Organization>;

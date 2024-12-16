@@ -14,10 +14,6 @@ export class User {
   @Prop({ required: true })
   password: string;
 
-  @ApiProperty({ description: 'User full name' })
-  @Prop({ required: true })
-  fullName: string;
-
   @ApiProperty({ description: 'Type of profile (consumer/organization)' })
   @Prop({ required: true, enum: ['consumer', 'organization'] })
   profileType: string;

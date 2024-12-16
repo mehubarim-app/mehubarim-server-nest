@@ -3,28 +3,30 @@ import { ApiProperty } from '@nestjs/swagger';
 
 @Schema()
 export class Time {
-  @ApiProperty({ description: 'Hour (0-23)', minimum: 0, maximum: 23 })
+  @ApiProperty({ description: 'Hours (0-23)', minimum: 0, maximum: 23 })
   @Prop({ required: true, min: 0, max: 23 })
-  hour!: number;
+  hours: number;
 
-  @ApiProperty({ description: 'Minute (0-59)', minimum: 0, maximum: 59 })
+  @ApiProperty({ description: 'Minutes (0-59)', minimum: 0, maximum: 59 })
   @Prop({ required: true, min: 0, max: 59 })
-  minute!: number;
+  minutes: number;
 
   constructor(partial: Partial<Time>) {
     Object.assign(this, partial);
   }
 
   get totalMinutes(): number {
-    return this.hour * 60 + this.minute;
+    return this.hours * 60 + this.minutes;
   }
 
   get formatted(): string {
     const pad = (n: number) => n.toString().padStart(2, '0');
-    return `${pad(this.hour)}:${pad(this.minute)}`;
+    return `${pad(this.hours)}:${pad(this.minutes)}`;
   }
 
   isValid(): boolean {
-    return this.hour >= 0 && this.hour < 24 && this.minute >= 0 && this.minute < 60;
+    return this.hours >= 0 && this.hours < 24 && this.minutes >= 0 && this.minutes < 60;
   }
 }
+
+export const TimeSchema = SchemaFactory.createForClass(Time);

@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Consumer } from '../../domain/entities/consumer.entity';
 import { IConsumerRepository } from '../../domain/repositories/consumer.repository.interface';
-import { ConsumerProfileDataDto } from '../../domain/dto/consumer-profile.dto';
+import { ConsumerProfileDto } from '../../domain/dto/consumer-profile.dto';
 
 @Injectable()
 export class ConsumerRepository implements IConsumerRepository {

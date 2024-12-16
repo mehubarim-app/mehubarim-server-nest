@@ -49,7 +49,6 @@ export class UserService {
       const user = await this.userRepository.create({
         email: registerUserDto.email,
         password: hashedPassword,
-        fullName: registerUserDto.fullName,
         profileType: profileDto.profileType,
         profileId: profile._id.toString(), // Convert ObjectId to string
         registeredVia: registerUserDto.registeredVia || 'email',
@@ -101,16 +100,17 @@ export class UserService {
     }
   }
 
+  async findByEmailWithPassword(email: string): Promise<User> {
+    return this.userRepository.findByEmailWithPassword(email);
+  }
+
+
   /**
    * Find user by email
    * @param email User email
    */
-  async findByEmail(email: string): Promise<User> {
-    const user = await this.userRepository.findByEmail(email);
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-    return user;
+  async findByEmailOrNull(email: string): Promise<User | null> {
+    return this.userRepository.findByEmailOrNull(email);
   }
 
   /**

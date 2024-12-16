@@ -1,35 +1,31 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { 
-  IsString, 
-  IsOptional, 
-  IsUrl, 
-  ValidateNested,
-  IsNotEmpty
-} from 'class-validator';
+import { IsArray, IsBoolean, IsNotEmpty, IsString, IsUrl, ValidateNested, IsOptional } from 'class-validator';
 import { AddressDto } from './address.dto';
-import { OperatingHoursByDayDto } from './operating_hours/operating-hours-by-day.dto';
-import { ExampleFactory } from '../../../shared/factories/example.factory';
+import { WeeklyScheduleDto } from './weekly-schedule.dto';
+import { SWAGGER_EXAMPLES } from './constants';
 
-export class OrganizationProfileDataDto {
-  // @ApiProperty({ 
-  //   description: 'Profile type discriminator',
-  //   enum: ProfileType,
-  //   example: ProfileType.organization
-  // })
-  // readonly profileType: ProfileType.organization = ProfileType.organization;
+export class OrganizationProfileDto {
+
+  @ApiProperty({ 
+    description: 'Organization name',
+    example: SWAGGER_EXAMPLES.organization.organizationName
+  })
+  @IsString()
+  @IsNotEmpty()
+  organizationName: string;
 
   @ApiProperty({ 
     description: 'Organization description',
-    example: "מרכז תורני לשיעורי תורה והלכה"
+    example: SWAGGER_EXAMPLES.organization.description
   })
   @IsString()
   @IsNotEmpty()
   description: string;
 
   @ApiProperty({ 
-    description: 'Phone number',
-    example: '+972501234567'
+    description: 'Contact phone number',
+    example: SWAGGER_EXAMPLES.organization.phone
   })
   @IsString()
   @IsNotEmpty()
@@ -37,25 +33,18 @@ export class OrganizationProfileDataDto {
 
   @ApiProperty({ 
     description: 'Website URL',
-    example: 'https://example.org',
-    required: false
+    required: false,
+    example: SWAGGER_EXAMPLES.organization.website
   })
+  @IsString()
   @IsOptional()
   @IsUrl()
   website?: string;
 
   @ApiProperty({ 
-    description: 'Registration number',
-    example: '123456789',
-    required: false
-  })
-  @IsString()
-  @IsOptional()
-  registrationNumber?: string;
-
-  @ApiProperty({ 
+    description: 'Address information',
     type: AddressDto,
-    example: ExampleFactory.getJerusalemAddress()
+    example: SWAGGER_EXAMPLES.organization.address
   })
   @ValidateNested()
   @Type(() => AddressDto)
@@ -63,23 +52,116 @@ export class OrganizationProfileDataDto {
   address: AddressDto;
 
   @ApiProperty({ 
-    type: OperatingHoursByDayDto,
-    description: 'Operating hours by day',
-    example: OperatingHoursByDayDto.examples.weeklyHours,
-    required: false
+    description: 'Registration number',
+    required: false,
+    example: SWAGGER_EXAMPLES.organization.registrationNumber
+  })
+  @IsString()
+  @IsOptional()
+  registrationNumber?: string;
+
+
+  @ApiProperty({ 
+    description: 'Target audience',
+    example: SWAGGER_EXAMPLES.organization.targetAudience
+  })
+  @IsArray()
+  @IsString({ each: true })
+  @IsNotEmpty()
+  targetAudience: string[];
+
+  @ApiProperty({ 
+    description: 'Languages supported',
+    example: SWAGGER_EXAMPLES.organization.languages
+  })
+  @IsArray()
+  @IsString({ each: true })
+  @IsNotEmpty()
+  languages: string[];
+
+  @ApiProperty({ 
+    description: 'Areas of interest',
+    example: SWAGGER_EXAMPLES.organization.interests
+  })
+  @IsArray()
+  @IsString({ each: true })
+  @IsNotEmpty()
+  interests: string[];
+
+  @ApiProperty({ 
+    description: 'Notes about the organization',
+    required: false,
+    example: SWAGGER_EXAMPLES.organization.notes
+  })
+  @IsString()
+  @IsOptional()
+  notes?: string;
+
+  @ApiProperty({ 
+    description: 'Weekly schedule',
+    type: WeeklyScheduleDto,
+    example: SWAGGER_EXAMPLES.organization.weeklySchedule
   })
   @ValidateNested()
-  @Type(() => OperatingHoursByDayDto)
-  @IsOptional()
-  operatingHours?: OperatingHoursByDayDto;
+  @Type(() => WeeklyScheduleDto)
+  @IsNotEmpty()
+  weeklySchedule: WeeklyScheduleDto;
 
-  static example(): OrganizationProfileDataDto {
-    const dto = new OrganizationProfileDataDto();
-    dto.description = "מרכז תורני לשיעורי תורה והלכה";
-    dto.phone = ExampleFactory.getExamplePhone();
-    dto.website = "https://example.org";
-    dto.address = ExampleFactory.getJerusalemAddress();
-    dto.operatingHours = OperatingHoursByDayDto.example();
-    return dto;
+  @ApiProperty({ 
+    description: 'Building image URL',
+    required: false,
+    example: SWAGGER_EXAMPLES.organization.buildingImageUrl
+  })
+  @IsString()
+  @IsOptional()
+  buildingImageUrl?: string;
+
+  @ApiProperty({ 
+    description: 'Logo URL',
+    required: false,
+    example: SWAGGER_EXAMPLES.organization.logoUrl
+  })
+  @IsString()
+  @IsOptional()
+  logoUrl?: string;
+
+  @ApiProperty({ 
+    description: 'Social media links',
+    required: false,
+    example: SWAGGER_EXAMPLES.organization.socialLinks
+  })
+  @IsOptional()
+  socialLinks?: Map<string, string>;
+
+  @ApiProperty({ 
+    description: 'Is organization verified',
+    example: false,
+    required: false,
+    default: false
+  })
+  @IsBoolean()
+  @IsOptional()
+  isVerified?: boolean = false;
+
+  @ApiProperty({ 
+    description: 'Is organization active',
+    example: false,
+    required: false,
+    default: false
+  })
+  @IsBoolean()
+  @IsOptional()
+  isActive?: boolean = false;
+
+  constructor() {
+    this.organizationName = '';
+    this.description = '';
+    this.phone = '';
+    this.address = new AddressDto();
+    this.targetAudience = [];
+    this.languages = [];
+    this.interests = [];
+    this.weeklySchedule = new WeeklyScheduleDto();
+    this.socialLinks = new Map();
   }
 }

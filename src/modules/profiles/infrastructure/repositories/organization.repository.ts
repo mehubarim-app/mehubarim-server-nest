@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Organization } from '../../domain/entities/organization.entity';
 import { IOrganizationRepository } from '../../domain/repositories/organization.repository.interface';
-import { OrganizationProfileDataDto } from '../../domain/dto/organization-profile.dto';
+import { OrganizationProfileDto } from '../../domain/dto/organization-profile.dto';
 
 @Injectable()
 export class OrganizationRepository implements IOrganizationRepository {
