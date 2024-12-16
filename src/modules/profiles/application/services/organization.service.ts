@@ -18,17 +18,21 @@ export class OrganizationService implements ProfileService {
   ) {}
 
   private convertWeeklySchedule(dto: OrganizationProfileDto): WeeklySchedule | undefined {
-    if (!dto.weeklySchedule) return undefined;
-    return new WeeklySchedule({
-      sunday: dto.weeklySchedule.sunday ? this.convertDaySchedule(dto.weeklySchedule.sunday) : undefined,
-      monday: dto.weeklySchedule.monday ? this.convertDaySchedule(dto.weeklySchedule.monday) : undefined,
-      tuesday: dto.weeklySchedule.tuesday ? this.convertDaySchedule(dto.weeklySchedule.tuesday) : undefined,
-      wednesday: dto.weeklySchedule.wednesday ? this.convertDaySchedule(dto.weeklySchedule.wednesday) : undefined,
-      thursday: dto.weeklySchedule.thursday ? this.convertDaySchedule(dto.weeklySchedule.thursday) : undefined,
-      friday: dto.weeklySchedule.friday ? this.convertDaySchedule(dto.weeklySchedule.friday) : undefined,
-      saturday: dto.weeklySchedule.saturday ? this.convertDaySchedule(dto.weeklySchedule.saturday) : undefined
-    });
-  }
+	  if (!dto.weeklySchedule) return undefined;
+	
+	  const daysOfWeek: (keyof WeeklySchedule)[] = [
+	    'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'
+	  ];
+	
+	  const schedule = daysOfWeek.reduce((acc, day) => {
+	    if (dto.weeklySchedule[day]) {
+	      (acc[day] as DaySchedule) = this.convertDaySchedule(dto.weeklySchedule[day]);
+	    }
+	    return acc;
+	  }, {} as Partial<WeeklySchedule>);
+	
+	  return new WeeklySchedule(schedule);
+	}
   
   private convertDaySchedule(dto: DayScheduleDto): DaySchedule {
     return new DaySchedule({
